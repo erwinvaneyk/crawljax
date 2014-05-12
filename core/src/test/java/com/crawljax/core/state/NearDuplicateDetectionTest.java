@@ -12,7 +12,7 @@ public class NearDuplicateDetectionTest {
 	@Test
 	public void testDuplicateOnSameState() {
 		StateVertex v = new StateVertexImpl(1, "http://demo.crawljax.com", "State1", "<html><body><h1>Test</h1></body></html>", "<html><body><h1></h1></body></html>");
-		boolean duplicate = v.isNearDuplicate(v);
+		boolean duplicate = NearDuplicateDetectionFactory.getInstance().isNearDuplicate(v,v);
 		assertEquals(true, duplicate);
 	}
 	
@@ -20,7 +20,7 @@ public class NearDuplicateDetectionTest {
 	public void testDuplicateOnNewState() {
 		StateVertex v = new StateVertexImpl(1, "http://demo.crawljax.com", "State1", "<html><body><h1>Test</h1></body></html>", "<html><body><h1></h1></body></html>");
 		StateVertex w = new StateVertexImpl(1, "http://demo.crawljax.com", "State1", "<html><body><h1>Test</h1></body></html>", "<html><body><h1></h1></body></html>");
-		boolean duplicate = v.isNearDuplicate(w);
+		boolean duplicate = NearDuplicateDetectionFactory.getInstance().isNearDuplicate(v,w);
 		assertEquals(true, duplicate);
 	}
 	
@@ -28,7 +28,7 @@ public class NearDuplicateDetectionTest {
 	public void testNotDuplicate() {
 		StateVertex v = new StateVertexImpl(1, "http://demo.crawljax.com", "State1", "<html><body><h1>Test</h1></body></html>", "<html><body><h1></h1></body></html>");
 		StateVertex w = new StateVertexImpl(1, "http://test.com", "State5", "<p>hello world</p>", "<p></p>");
-		boolean duplicate = v.isNearDuplicate(w);
+		boolean duplicate = NearDuplicateDetectionFactory.getInstance().isNearDuplicate(v,w);
 		assertEquals(false, duplicate);
 	}
 	
@@ -36,7 +36,7 @@ public class NearDuplicateDetectionTest {
 	public void testSameContentDifferentSite() {
 		StateVertex v = new StateVertexImpl(1, "http://demo.crawljax.com", "State1", "<html><body><h1>Test</h1></body></html>", "<html><body><h1></h1></body></html>");
 		StateVertex w = new StateVertexImpl(1, "http://test.com", "Index", "<html><body><h1>Test</h1></body></html>", "<html><body><h1></h1></body></html>");
-		boolean duplicate = v.isNearDuplicate(w);
+		boolean duplicate = NearDuplicateDetectionFactory.getInstance().isNearDuplicate(v,w);
 		assertEquals(true, duplicate);
 	}
 }

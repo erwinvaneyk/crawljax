@@ -89,7 +89,7 @@ class StateVertexImpl implements StateVertex {
 	public boolean equals(Object object) {
 		if (object instanceof StateVertex) {
 			StateVertex that = (StateVertex) object;
-			return NearDuplicateDetectionFactory.getInstance().isNearDuplicate(that);
+			return NearDuplicateDetectionFactory.getInstance().isNearDuplicate(this, that);
 		}
 		return false;
 	}
