@@ -24,6 +24,7 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 	
 	@Override
 	public long generateHash(String doc) {
+		assert doc != null;
 		int bitLen = 32;
 		int hash = 0x00000000;
 		int one = 0x00000001; //8

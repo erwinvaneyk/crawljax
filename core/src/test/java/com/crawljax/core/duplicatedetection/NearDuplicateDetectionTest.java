@@ -57,4 +57,16 @@ public class NearDuplicateDetectionTest {
 		long hashOfwFromDom = ndd.generateHash(w.getDom());
 		assertTrue(hashOfvFromDom != hashOfwFromDom);
 	}
+	
+	@Test (expected = AssertionError.class)
+	public void testDomIsNull() {
+		StateVertex v = new StateVertexImpl(1, "http://something.com", "State5", null, "<p></p>");
+		ndd.generateHash(v.getDom());
+	}
+	
+	@Test (expected = AssertionError.class)
+	public void testStrippedDomIsNull() {
+		StateVertex v = new StateVertexImpl(1, "http://something.com", "State5", "<p>Hallo</p>", null);
+		ndd.generateHash(v.getStrippedDom());
+	}
 }
