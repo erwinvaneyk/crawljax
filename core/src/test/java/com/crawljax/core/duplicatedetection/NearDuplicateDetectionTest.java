@@ -8,11 +8,11 @@ import org.junit.Test;
 import com.crawljax.core.state.StateVertex;
 import com.crawljax.core.state.StateVertexImpl;
 import com.crawljax.core.state.duplicatedetection.NearDuplicateDetection;
-import com.crawljax.core.state.duplicatedetection.NearDuplicateDetectionFactory;
+import com.crawljax.core.state.duplicatedetection.NearDuplicateDetectionSingleton;
 
 public class NearDuplicateDetectionTest {
 	
-	NearDuplicateDetection ndd = NearDuplicateDetectionFactory.getInstance();
+	NearDuplicateDetection ndd = NearDuplicateDetectionSingleton.getInstance();
 	StateVertex v = new StateVertexImpl(1, "http://demo.crawljax.com", "State1", "<html><body><h1>Test</h1></body></html>", "<html><body><h1></h1></body></html>");
 	
 	@Test

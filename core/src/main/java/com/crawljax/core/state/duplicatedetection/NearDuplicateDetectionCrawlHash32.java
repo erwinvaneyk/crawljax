@@ -30,7 +30,8 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 		int[] bits = new int[bitLen];
 		List<String> tokens = features.generateFeatures(doc);
 		for (String t : tokens) {
-			int v = xxhash.hash(t.getBytes(), 0, bitLen, 0x9747b28c);
+			int v = xxhash.hash(t.getBytes(), 0, t.length(), 0x9747b28c);
+			logger.debug(String.valueOf(v));
 			for (int i = bitLen; i >= 1; --i) {
 				if (((v >> (bitLen - i)) & 1) == 1)
 					++bits[i - 1];
@@ -44,6 +45,7 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 			}
 			one = one << 1;
 		}
+		logger.debug("hash: " + String.valueOf(hash));
 		return hash;
 	}
 
