@@ -126,8 +126,8 @@ public class CrawljaxConfiguration {
 		public CrawljaxConfigurationBuilder setThresholdNearDuplicateDetection(int threshold) {
 			Preconditions.checkArgument(threshold >= 0,
 					"The theshold should be greater or equal to 0.");
-			Preconditions.checkArgument(threshold <= (Integer.BYTES * 8),
-					"The theshold should be smaller or equal to " + Integer.BYTES * 8);
+			Preconditions.checkArgument(threshold <= 32,
+					"The theshold should be smaller or equal to " + 32);
 			config.thresholdNearDuplicateDetection = threshold;
 			return this;
 		}
