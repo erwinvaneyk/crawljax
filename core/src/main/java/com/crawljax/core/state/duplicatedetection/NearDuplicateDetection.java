@@ -17,5 +17,5 @@ public interface NearDuplicateDetection {
 
 	public boolean isNearDuplicateHash(int hash1, int hash2);
 		
-	public int getDistence(int hash1, int hash2);
+	public int getDistance(int hash1, int hash2);
 }

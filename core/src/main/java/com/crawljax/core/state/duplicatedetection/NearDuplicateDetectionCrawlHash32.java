@@ -98,7 +98,7 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 	}
 
 	@Override
-	public int getDistence(int hash1, int hash2) {
+	public int getDistance(int hash1, int hash2) {
 		return hammingDistance(hash1, hash2);
 	}
 }
