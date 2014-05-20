@@ -68,7 +68,7 @@ public class StateVertexImpl implements StateVertex {
 		this.dom = dom;
 		this.strippedDom = strippedDom;
 		try {
-			this.hash = NearDuplicateDetectionSingleton.getInstance().generateHash(strippedDom);
+			this.hash = new NearDuplicateDetectionSingleton().getInstance().generateHash(strippedDom);
 		} catch (FeatureShinglesException e) {
 			this.hash = strippedDom.hashCode();
 			LOGGER.error(e.getMessage());
@@ -105,7 +105,7 @@ public class StateVertexImpl implements StateVertex {
 	public boolean equals(Object object) {
 		if (object instanceof StateVertex) {
 			StateVertex that = (StateVertex) object;
-			return NearDuplicateDetectionSingleton.getInstance().isNearDuplicateHash(this.hashCode(), that.hashCode());
+			return new NearDuplicateDetectionSingleton().getInstance().isNearDuplicateHash(this.hashCode(), that.hashCode());
 		}
 		return false;
 	}

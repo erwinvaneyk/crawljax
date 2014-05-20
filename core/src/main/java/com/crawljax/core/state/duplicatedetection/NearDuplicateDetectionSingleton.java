@@ -9,7 +9,7 @@ public class NearDuplicateDetectionSingleton {
 	private static int threshold;
 	private static List<FeatureType> features = new ArrayList<FeatureType>();
 	
-	public static NearDuplicateDetection getInstance() {
+	public NearDuplicateDetection getInstance() {
 		if (ndd == null) {
 			features.add(new FeatureShingles(3, Type.WORDS));
 			ndd = new NearDuplicateDetectionCrawlHash32(threshold, features);
@@ -17,13 +17,13 @@ public class NearDuplicateDetectionSingleton {
 		return ndd;
 	}
 	
-	public static void setThreshold(int t) {
+	public void setThreshold(int t) {
 		threshold = t;
 	}
-	public static int getThreshold() {
+	public int getThreshold() {
 		return threshold;
 	}
-	public static void addFeature(FeatureType ft) {
+	public void addFeature(FeatureType ft) {
 		features.add(ft);
 	}
 }
