@@ -24,13 +24,17 @@ public class NearDuplicateDetectionSingleton {
 	
 	public static void setThreshold(int t) {
 		logger.info("Set the threshold op {}", t);
-
-		ndd = new NearDuplicateDetectionCrawlHash32(t, features);
+		resetInstance();
 	}
 	public static int getThreshold() {
 		return threshold;
 	}
 	public static void addFeature(FeatureType ft) {
 		features.add(ft);
+		resetInstance();
+	}
+	
+	public static void resetInstance() {
+		ndd = null;
 	}
 }
