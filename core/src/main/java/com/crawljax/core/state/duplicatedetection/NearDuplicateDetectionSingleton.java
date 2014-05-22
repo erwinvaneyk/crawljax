@@ -23,7 +23,7 @@ public class NearDuplicateDetectionSingleton {
 	}
 	
 	public static void setThreshold(int t) {
-		logger.info("Set the threshold op {}", t);
+		threshold = t;
 		resetInstance();
 	}
 	public static int getThreshold() {
