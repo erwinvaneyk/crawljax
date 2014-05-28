@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import com.crawljax.core.CandidateElement;
-import com.crawljax.core.state.duplicatedetection.FeatureShinglesException;
+import com.crawljax.core.state.duplicatedetection.FeatureException;
 import com.crawljax.core.state.duplicatedetection.NearDuplicateDetectionSingleton;
 import com.crawljax.util.DomUtils;
 import com.google.common.annotations.VisibleForTesting;
@@ -69,7 +69,7 @@ public class StateVertexImpl implements StateVertex {
 		this.strippedDom = strippedDom;
 		try {
 			this.hash = NearDuplicateDetectionSingleton.getInstance().generateHash(strippedDom);
-		} catch (FeatureShinglesException e) {
+		} catch (FeatureException e) {
 			this.hash = new int[1];
 			this.hash[0] = strippedDom.hashCode();
 			LOGGER.error(e.getMessage());
