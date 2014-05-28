@@ -14,10 +14,12 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 
 	private List<FeatureType> features;
 	private double treshold;
+	private HashGenerator hashGenerator;
 	
-	public NearDuplicateDetectionBroder32(double t, List<FeatureType> fs) {
+	public NearDuplicateDetectionBroder32(double t, List<FeatureType> fs, HashGenerator hg) {
 		this.treshold = t;
 		this.features = fs;
+		this.hashGenerator = hg;
 	}
 	
 	/**
@@ -26,14 +28,13 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	 * @return an array of the hashes, generated from the features, of the given string
 	 */
 	@Override
-	public int[] generateHash(String doc) throws FeatureShinglesException {
+	public int[] generateHash(String doc) throws FeatureException {
 		List<String> shingles = this.generateFeatures(doc);
 		int length = shingles.size();
 		
 		int[] hashes = new int[length];
 		for (int i=0; i<length; i++) {
-			// TODO Maybe xxHash instead of hashCode
-			hashes[i] = shingles.get(i).hashCode();
+			hashes[i] = hashGenerator.generateHash(shingles.get(i));
 		}
 		return hashes;
 	}
@@ -77,9 +78,9 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	 * Generate the features from the content of the state.
 	 * @param doc The content of the state
 	 * @return A list of strings that represent the features
-	 * @throws FeatureShinglesException if the feature sie is to big of if the chosen feature type does not exist
+	 * @throws FeatureException if the feature sie is to big of if the chosen feature type does not exist
 	 */
-	private List<String> generateFeatures(String doc) throws FeatureShinglesException {
+	private List<String> generateFeatures(String doc) throws FeatureException {
 		List<String> li = new ArrayList<String>();
 			
 		for(FeatureType feature : features) {
@@ -88,12 +89,12 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 		return li;
 	}
 	
-	private int unionCount(HashSet<Integer> list1, HashSet<Integer> list2) {
+	private int unionCount(Set<Integer> list1, Set<Integer> list2) {
 		Set<Integer> union = Sets.union(list1, list2);
 		return union.size();
 	}
 	
-	private int intersectionCount(HashSet<Integer> list1, HashSet<Integer> list2) {
+	private int intersectionCount(Set<Integer> list1, Set<Integer> list2) {
 		Set<Integer> intersection = Sets.intersection(list1, list2);
 		return intersection.size();
 	}
