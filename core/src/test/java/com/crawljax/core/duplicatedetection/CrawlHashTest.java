@@ -102,7 +102,7 @@ public class CrawlHashTest {
 		
 		int[] hash1 = ndd.generateHash(strippedDom1);
 		int[] hash2 = ndd.generateHash(strippedDom2);
-		assertEquals(hash1, hash2);
+		assertEquals(hash1[0], hash2[0]);
 	}
 	
 	@Test
@@ -117,7 +117,7 @@ public class CrawlHashTest {
 		
 		int[] hashOfvFromDom = ndd.generateHash(strippedDom1);
 		int[] hashOfwFromDom = ndd.generateHash(strippedDom2);
-		assertFalse(hashOfvFromDom == hashOfwFromDom);
+		assertFalse(hashOfvFromDom[0] == hashOfwFromDom[0]);
 	}
 	
 	@Test (expected = AssertionError.class)
