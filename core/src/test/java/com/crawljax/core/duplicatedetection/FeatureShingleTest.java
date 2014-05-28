@@ -7,16 +7,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.crawljax.core.state.duplicatedetection.FeatureShingles;
-import com.crawljax.core.state.duplicatedetection.FeatureShinglesException;
-import com.crawljax.core.state.duplicatedetection.FeatureType;
-import com.crawljax.core.state.duplicatedetection.FeatureSizeType;
+import com.crawljax.core.state.duplicatedetection.*;
 
 public class FeatureShingleTest {
 
 	@Test
-	public void testShingleChars() throws FeatureShinglesException {
-		FeatureType shingleChars = new FeatureShingles(3, FeatureSizeType.CHARS);
+	public void testShingleChars() throws FeatureException {
+		FeatureType shingleChars = new FeatureShingles(3, FeatureShingles.SizeType.CHARS);
 		String doc = "Test ha";
 		List<String> features = shingleChars.getFeatures(doc);
 		
@@ -35,8 +32,8 @@ public class FeatureShingleTest {
 	}
 	
 	@Test
-	public void testShingleCharNotExist() throws FeatureShinglesException {
-		FeatureType shingleChars = new FeatureShingles(3, FeatureSizeType.CHARS);
+	public void testShingleCharNotExist() throws FeatureException {
+		FeatureType shingleChars = new FeatureShingles(3, FeatureShingles.SizeType.CHARS);
 		String doc = "Test ha";
 		List<String> features = shingleChars.getFeatures(doc);
 		
@@ -45,8 +42,8 @@ public class FeatureShingleTest {
 	}
 	
 	@Test
-	public void testShingleWords() throws FeatureShinglesException {
-		FeatureType shingleWords = new FeatureShingles(2, FeatureSizeType.WORDS);
+	public void testShingleWords() throws FeatureException {
+		FeatureType shingleWords = new FeatureShingles(2, FeatureShingles.SizeType.WORDS);
 		String doc = "This is a test";
 		List<String> features = shingleWords.getFeatures(doc);
 		
@@ -61,8 +58,8 @@ public class FeatureShingleTest {
 	}
 	
 	@Test
-	public void testShingleWordNotExist() throws FeatureShinglesException {
-		FeatureType shingleWords = new FeatureShingles(2, FeatureSizeType.WORDS);
+	public void testShingleWordNotExist() throws FeatureException {
+		FeatureType shingleWords = new FeatureShingles(2, FeatureShingles.SizeType.WORDS);
 		String doc = "This is a test";
 		List<String> features = shingleWords.getFeatures(doc);
 		
@@ -71,8 +68,8 @@ public class FeatureShingleTest {
 	}
 	
 	@Test
-	public void testShingleSentencesSizeOne() throws FeatureShinglesException {
-		FeatureType shingleSentences = new FeatureShingles(1, FeatureSizeType.SENTENCES);
+	public void testShingleSentencesSizeOne() throws FeatureException {
+		FeatureType shingleSentences = new FeatureShingles(1, FeatureShingles.SizeType.SENTENCES);
 		String docSen = "This is a test. Yes. No more inspiration right now.";
 		List<String> features = shingleSentences.getFeatures(docSen);
 		
@@ -87,8 +84,8 @@ public class FeatureShingleTest {
 	}
 	
 	@Test
-	public void testShingleSentencesSizeTwo() throws FeatureShinglesException {
-		FeatureType shingleSentences = new FeatureShingles(2, FeatureSizeType.SENTENCES);
+	public void testShingleSentencesSizeTwo() throws FeatureException {
+		FeatureType shingleSentences = new FeatureShingles(2, FeatureShingles.SizeType.SENTENCES);
 		String docSen = "This is a test. Yes. No more inspiration right now.";
 		List<String> features = shingleSentences.getFeatures(docSen);
 		
@@ -101,8 +98,8 @@ public class FeatureShingleTest {
 	}
 	
 	@Test
-	public void testShingleSentencesNotExist() throws FeatureShinglesException {
-		FeatureType shingleSentences = new FeatureShingles(2, FeatureSizeType.SENTENCES);
+	public void testShingleSentencesNotExist() throws FeatureException {
+		FeatureType shingleSentences = new FeatureShingles(2, FeatureShingles.SizeType.SENTENCES);
 		String docSen = "This is a test. Yes. No more inspiration right now.";
 		List<String> features = shingleSentences.getFeatures(docSen);
 		
