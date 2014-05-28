@@ -4,11 +4,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import com.crawljax.core.CandidateElement;
-<<<<<<< HEAD
-=======
-import com.crawljax.core.state.duplicatedetection.FeatureException;
-import com.crawljax.core.state.duplicatedetection.NearDuplicateDetectionSingleton;
->>>>>>> 0d06b40f573cf1d3ee7b842983b5fc4fc5d11dd3
 import com.crawljax.util.DomUtils;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
@@ -63,17 +58,6 @@ class StateVertexImpl implements StateVertex {
 		this.name = name;
 		this.dom = dom;
 		this.strippedDom = strippedDom;
-<<<<<<< HEAD
-=======
-		try {
-			this.hash = NearDuplicateDetectionSingleton.getInstance().generateHash(strippedDom);
-		} catch (FeatureException e) {
-			this.hash = new int[1];
-			this.hash[0] = strippedDom.hashCode();
-			LOGGER.error(e.getMessage());
-			e.printStackTrace();
-		}
->>>>>>> 0d06b40f573cf1d3ee7b842983b5fc4fc5d11dd3
 	}
 
 	@Override
