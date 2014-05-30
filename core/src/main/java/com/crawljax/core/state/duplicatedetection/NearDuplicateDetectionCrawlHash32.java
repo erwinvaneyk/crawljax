@@ -6,35 +6,36 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection {
 
-	private static final Logger logger = LoggerFactory.getLogger(NearDuplicateDetectionCrawlHash32.class);
-	
+	private static final Logger logger = LoggerFactory
+	        .getLogger(NearDuplicateDetectionCrawlHash32.class);
+
 	private List<FeatureType> features;
 	private double threshold;
 	private HashGenerator hashGenerator;
-	
-	public NearDuplicateDetectionCrawlHash32(double threshold, List<FeatureType> fs, HashGenerator hg) {
+
+	public NearDuplicateDetectionCrawlHash32(double threshold, List<FeatureType> fs,
+	        HashGenerator hg) {
 		this.hashGenerator = hg;
 		this.features = fs;
 		this.threshold = threshold;
 	}
-	
+
 	private List<String> generateFeatures(String doc) throws FeatureException {
 		List<String> li = new ArrayList<String>();
-		for(FeatureType feature : features) {
+		for (FeatureType feature : features) {
 			li.addAll(feature.getFeatures(doc));
 		}
 		return li;
 	}
-	
+
 	@Override
-	public int[] generateHash(String doc) throws FeatureException{
+	public int[] generateHash(String doc) throws FeatureException {
 		assert doc != null;
 		int bitLen = 32;
 		int hash = 0x00000000;
-		int one = 0x00000001; //8
+		int one = 0x00000001; // 8
 		int[] bits = new int[bitLen];
 		List<String> tokens = this.generateFeatures(doc);
 		for (String t : tokens) {
@@ -52,7 +53,7 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 			}
 			one = one << 1;
 		}
-		int[] hashArray = {hash};
+		int[] hashArray = { hash };
 		return hashArray;
 	}
 
@@ -68,10 +69,11 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 
 	@Override
 	public boolean isNearDuplicateHash(int[] hash1, int[] hash2) {
-		logger.debug("Comparing hash {} with hash {} using a threshold of {}", hash1[0], hash2[0], threshold);
-		return ((double) hammingDistance(hash1[0],hash2[0])) <= threshold;
+		logger.debug("Comparing hash {} with hash {} using a threshold of {}", hash1[0],
+		        hash2[0], threshold);
+		return ((double) hammingDistance(hash1[0], hash2[0])) <= threshold;
 	}
-	
+
 	public double getThreshold() {
 		return threshold;
 	}

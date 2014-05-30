@@ -7,7 +7,7 @@ import net.jpountz.xxhash.XXHashFactory;
  * HashGenerator using the xxhash32-algorithm (https://code.google.com/p/xxhash/)
  */
 public class XxHashGenerator implements HashGenerator {
-	
+
 	private XXHash32 xxhash;
 
 	/**
