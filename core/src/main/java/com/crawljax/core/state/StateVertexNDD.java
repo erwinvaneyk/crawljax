@@ -45,7 +45,7 @@ public class StateVertexNDD implements StateVertex {
 	@VisibleForTesting
 	StateVertexNDD(int id, String name, String dom) {
 		this(id, null, name, dom, dom);
-		
+
 	}
 
 	/**
@@ -104,8 +104,9 @@ public class StateVertexNDD implements StateVertex {
 	public boolean equals(Object object) {
 		if (object instanceof StateVertex) {
 			StateVertexNDD that = (StateVertexNDD) object;
-			
-			return NearDuplicateDetectionSingleton.getInstance().isNearDuplicateHash(this.getHashes(), that.getHashes());
+
+			return NearDuplicateDetectionSingleton.getInstance().isNearDuplicateHash(
+			        this.getHashes(), that.getHashes());
 		}
 		return false;
 	}

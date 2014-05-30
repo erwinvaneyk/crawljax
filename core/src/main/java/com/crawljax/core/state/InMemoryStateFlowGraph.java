@@ -114,7 +114,7 @@ public class InMemoryStateFlowGraph implements Serializable, StateFlowGraph {
 		writeLock.lock();
 		try {
 			boolean duplicate = this.hasNearDuplicate(stateVertix);
-			
+
 			if (!duplicate) {
 				sfg.addVertex(stateVertix);
 				stateById.put(stateVertix.getId(), stateVertix);
@@ -131,9 +131,9 @@ public class InMemoryStateFlowGraph implements Serializable, StateFlowGraph {
 			writeLock.unlock();
 		}
 	}
-	
+
 	private boolean hasNearDuplicate(StateVertex vertex) {
-		for(StateVertex vertexOfGraph : sfg.vertexSet()) {
+		for (StateVertex vertexOfGraph : sfg.vertexSet()) {
 			if (vertex.equals(vertexOfGraph)) {
 				LOG.info("Duplicate found: {}, {}", vertex.getId(), vertexOfGraph.getId());
 				return true;
@@ -141,7 +141,6 @@ public class InMemoryStateFlowGraph implements Serializable, StateFlowGraph {
 		}
 		return false;
 	}
-
 
 	@Override
 	public StateVertex getById(int id) {
