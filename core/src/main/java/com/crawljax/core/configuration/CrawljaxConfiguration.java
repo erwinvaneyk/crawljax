@@ -31,6 +31,8 @@ public class CrawljaxConfiguration {
 
 	public static class CrawljaxConfigurationBuilder {
 
+		private final int LENGTH_OF_DUPLICATE_DETECTION_HASH = 32;
+		
 		private final ImmutableList.Builder<Plugin> pluginBuilder = ImmutableList.builder();
 		private final ImmutableList.Builder<ValidDomStripper> validStrippers = ImmutableList.builder();
 		private final ImmutableList.Builder<DomStripper> strippers = ImmutableList.builder();
@@ -126,7 +128,7 @@ public class CrawljaxConfiguration {
 		public CrawljaxConfigurationBuilder setThresholdNearDuplicateDetection(double threshold) {
 			Preconditions.checkArgument(threshold >= 0,
 					"The theshold should be greater or equal to 0.");
-			Preconditions.checkArgument(threshold <= 32,
+			Preconditions.checkArgument(threshold <= LENGTH_OF_DUPLICATE_DETECTION_HASH,
 					"The theshold should be smaller or equal to " + 32);
 			config.thresholdNearDuplicateDetection = threshold;
 			return this;

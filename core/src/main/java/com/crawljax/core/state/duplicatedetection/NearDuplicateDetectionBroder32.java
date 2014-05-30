@@ -69,11 +69,11 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	private double getJaccardCoefficient(int[] state1, int[] state2) {
 		Set<Integer> setOfFirstArg = new HashSet<>();
 		Set<Integer> setOfSecondArg = new HashSet<>();
-		for (int i = 0; i < state1.length; i++) {
-			setOfFirstArg.add(state1[i]);
+		for (int state : state1) {
+			setOfFirstArg.add(state);
 		}
-		for (int j = 0; j < state2.length; j++) {
-			setOfSecondArg.add(state2[j]);
+		for (int state : state2) {
+			setOfSecondArg.add(state);
 		}
 
 		double unionCount = this.unionCount(setOfFirstArg, setOfSecondArg);

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOGGER = LoggerFactory
 	        .getLogger(NearDuplicateDetectionCrawlHash32.class);
 
 	private List<FeatureType> features;
@@ -69,7 +69,7 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 
 	@Override
 	public boolean isNearDuplicateHash(int[] hash1, int[] hash2) {
-		logger.debug("Comparing hash {} with hash {} using a threshold of {}", hash1[0],
+		LOGGER.debug("Comparing hash {} with hash {} using a threshold of {}", hash1[0],
 		        hash2[0], threshold);
 		return ((double) hammingDistance(hash1[0], hash2[0])) <= threshold;
 	}
