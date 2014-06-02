@@ -6,24 +6,40 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * Near-duplicate detection based on the Jaccard coefficient and shingles.
  */
+@Singleton
 public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 
 	private List<FeatureType> features;
-	private double treshold;
+	private double threshold;
 	private HashGenerator hashGenerator;
-
+	private final static float THRESHOLD_UPPERLIMIT = 1;
+	private final static float THRESHOLD_LOWERLIMIT = 0;
+	
 	public NearDuplicateDetectionBroder32(double t, List<FeatureType> fs, HashGenerator hg) {
-		this.treshold = t;
-		this.features = fs;
+		checkPreconditionsFeatures(fs);
+		checkPreconditionsThreshold(t);
+		this.threshold = t;
 		this.hashGenerator = hg;
+		this.features = fs;
 	}
-
-	public double getThreshold() {
-		return treshold;
+	
+	/**
+	 * This constructor uses the default, generally most optimal, values for the threshold and 
+	 * features. It is also used for Guice-invocations.
+	 * @param hg a hash-generator, such as the XxHashGenerator.
+	 */
+	@Inject
+	public NearDuplicateDetectionBroder32(HashGenerator hg) {
+		// TODO should be done in the configuration?
+		this.hashGenerator = hg;
+		this.features = new ArrayList<FeatureType>();
+		this.threshold = 0.32;
 	}
 
 	/**
@@ -34,7 +50,11 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	 * @return an array of the hashes, generated from the features, of the given string
 	 */
 	@Override
-	public int[] generateHash(String doc) throws FeatureException {
+	public int[] generateHash(String doc) {
+		// Check preconditions
+		checkPreconditionsFeatures(features);
+		checkPreconditionsThreshold(threshold);
+		
 		List<String> shingles = this.generateFeatures(doc);
 		int length = shingles.size();
 
@@ -44,14 +64,15 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 		}
 		return hashes;
 	}
-
+	
 	/**
-	 * Return true if the JaccardCoefficient is higher than the treshold.
+	 * Return true if the JaccardCoefficient is higher than the threshold.
 	 */
 	@Override
 	public boolean isNearDuplicateHash(int[] state1, int[] state2) {
-		return (this.getDistance(state1, state2) <= this.treshold);
+		return (this.getDistance(state1, state2) >= this.threshold);
 	}
+	
 
 	/**
 	 * Get the distance between two sets.
@@ -62,23 +83,24 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	 */
 	@Override
 	public double getDistance(int[] state1, int[] state2) {
-		double jaccardCoefficient = this.getJaccardCoefficient(state1, state2);
-		return 1 - jaccardCoefficient;
+		//double jaccardCoefficient = this.getJaccardCoefficient(state1, state2);
+		//return 1 - jaccardCoefficient;
+		return this.getJaccardCoefficient(state1, state2);
 	}
-
+	
 	private double getJaccardCoefficient(int[] state1, int[] state2) {
-		Set<Integer> setOfFirstArg = new HashSet<>();
-		Set<Integer> setOfSecondArg = new HashSet<>();
+		Set<Integer> setOfFirstArg = new HashSet<Integer>(state1.length);
+		Set<Integer> setOfSecondArg = new HashSet<Integer>(state2.length);
 		for (int state : state1) {
 			setOfFirstArg.add(state);
 		}
 		for (int state : state2) {
 			setOfSecondArg.add(state);
 		}
-
-		double unionCount = this.unionCount(setOfFirstArg, setOfSecondArg);
-		double intersectionCount = this.intersectionCount(setOfFirstArg, setOfSecondArg);
-
+		
+		double unionCount = Sets.union(setOfFirstArg, setOfSecondArg).size();
+		double intersectionCount =Sets.intersection(setOfFirstArg, setOfSecondArg).size();
+		
 		return (intersectionCount / unionCount);
 	}
 
@@ -91,22 +113,51 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	 * @throws FeatureException
 	 *             if the feature size is to big or if the chosen feature type does not exist
 	 */
-	private List<String> generateFeatures(String doc) throws FeatureException {
-		List<String> li = new ArrayList<>();
-
-		for (FeatureType feature : features) {
+	private List<String> generateFeatures(String doc) {
+		List<String> li = new ArrayList<String>();
+			
+		for(FeatureType feature : features) {
 			li.addAll(feature.getFeatures(doc));
 		}
 		return li;
 	}
 
-	private int unionCount(Set<Integer> list1, Set<Integer> list2) {
-		Set<Integer> union = Sets.union(list1, list2);
-		return union.size();
+	/**
+	 * Checks the precondition for the feature-list, which should not be empty or null.
+	 * @param features feature-list to be checked
+	 */
+	private void checkPreconditionsFeatures(List<FeatureType> features) {
+		if(features == null || features.isEmpty()) {
+			throw new FeatureException("Invalid feature-list provided, feature-list cannot be null or empty. (Provided: " + features + ")");
+		}		
 	}
 
-	private int intersectionCount(Set<Integer> list1, Set<Integer> list2) {
-		Set<Integer> intersection = Sets.intersection(list1, list2);
-		return intersection.size();
+	/**'
+	 * Checks the precondition for the threshold, which should be within the predefined upper and lower bounds.
+	 * @param threshold
+	 */
+	private void checkPreconditionsThreshold(double threshold) {
+		if(threshold > THRESHOLD_UPPERLIMIT || threshold < THRESHOLD_LOWERLIMIT) {
+			throw new FeatureException("Invalid threshold value " + threshold + ", threshold as to "
+					+ "be between " + THRESHOLD_LOWERLIMIT + " and " + THRESHOLD_UPPERLIMIT + ".");
+		}
 	}
+	
+	public double getTreshold() {
+		return threshold;
+	}
+
+	public void setThreshold(double threshold) {
+		checkPreconditionsThreshold(threshold);
+		this.threshold = threshold;
+	}
+
+	public List<FeatureType> getFeatures() {
+		return features;
+	}
+	
+	public void setFeatures(List<FeatureType> features) {
+		checkPreconditionsFeatures(features);
+		this.features = features;	
+	}	
 }
