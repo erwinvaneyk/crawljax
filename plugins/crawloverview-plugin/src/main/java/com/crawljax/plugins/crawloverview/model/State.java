@@ -2,6 +2,7 @@ package com.crawljax.plugins.crawloverview.model;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.crawljax.core.configuration.CrawljaxConfiguration.CrawljaxConfigurationBuilder;
 import com.crawljax.core.state.StateVertex;
 import com.crawljax.core.state.StateVertexNDD;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -22,6 +23,9 @@ public class State {
 	private final int[] hash;
 	private final int id;
 	private final ImmutableList<String> failedEvents;
+	// minDuplicateDistance is the distance to the state that has most in common with this state
+	// or is most likely a duplicate of this state.
+	private final double minDuplicateDistance;
 
 	public State(StateVertex state, int fanIn, int fanOut,
 	        ImmutableList<CandidateElementPosition> candidates,
@@ -33,15 +37,18 @@ public class State {
 		this.name = state.getName();
 		this.url = state.getUrl();
 		this.id = state.getId();
+
 		if (state instanceof StateVertexNDD) {
 			StateVertexNDD stateNDD = (StateVertexNDD) state;
 			this.hash = stateNDD.getHashes();
+			this.minDuplicateDistance = stateNDD.getMinDuplicateDistance();
 		} else {
 			int[] hashCode = new int[1];
 			hashCode[0] = state.hashCode();
 			this.hash = hashCode;
+
+			this.minDuplicateDistance = CrawljaxConfigurationBuilder.LENGTH_OF_DUPLICATE_DETECTION_HASH;
 		}
-		
 	}
 
 	@JsonCreator
@@ -51,7 +58,8 @@ public class State {
 	        @JsonProperty("candidateElements") ImmutableList<CandidateElementPosition> candidateElements,
 	        @JsonProperty("fanIn") int fanIn, @JsonProperty("fanOut") int fanOut,
 	        @JsonProperty("hash") int[] hash, @JsonProperty("id") int id,
-	        @JsonProperty("failedEvents") ImmutableList<String> failedEvents) {
+	        @JsonProperty("failedEvents") ImmutableList<String> failedEvents,
+	        @JsonProperty("minDuplicateDistance") double minDuplicateDistance) {
 		super();
 		this.name = name;
 		this.url = url;
@@ -61,6 +69,7 @@ public class State {
 		this.hash = hash;
 		this.id = id;
 		this.failedEvents = failedEvents;
+		this.minDuplicateDistance = minDuplicateDistance;
 	}
 
 	public String getName() {
@@ -93,6 +102,10 @@ public class State {
 
 	public ImmutableList<String> getFailedEvents() {
 		return failedEvents;
+	}
+	
+	public double getMinDuplicateDistance() {
+		return minDuplicateDistance;
 	}
 
 	@Override

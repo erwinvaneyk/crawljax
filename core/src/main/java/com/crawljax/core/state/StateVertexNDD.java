@@ -23,8 +23,6 @@ import org.w3c.dom.Document;
 @SuppressWarnings("serial")
 public class StateVertexNDD implements StateVertex {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(StateMachine.class.getName());
-
 	private final int id;
 	private final String dom;
 	private final String strippedDom;
@@ -34,6 +32,7 @@ public class StateVertexNDD implements StateVertex {
 
 	private ImmutableList<CandidateElement> candidateElements;
 	private NearDuplicateDetection nearDuplicateDetection;
+	private double minDuplicateDistance;
 
 	/**
 	 * Creates a current state without an url and the stripped dom equals the dom.
@@ -71,6 +70,7 @@ public class StateVertexNDD implements StateVertex {
 		this.nearDuplicateDetection = ndd;
 		this.strippedDom = strippedDom;
 		this.hash = ndd.generateHash(strippedDom);
+		this.minDuplicateDistance = 32;
 	}
 
 	@Override
@@ -133,5 +133,13 @@ public class StateVertexNDD implements StateVertex {
 	@Override
 	public ImmutableList<CandidateElement> getCandidateElements() {
 		return candidateElements;
+	}
+
+	public double getMinDuplicateDistance() {
+		return minDuplicateDistance;
+	}
+	
+	public void setMinDuplicateDistance(double minDuplicateDistance) {
+		this.minDuplicateDistance = minDuplicateDistance;
 	}
 }
