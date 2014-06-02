@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.crawljax.browser.EmbeddedBrowser.BrowserType;
@@ -14,6 +16,7 @@ import com.crawljax.core.CrawljaxException;
 import com.crawljax.core.configuration.CrawlRules.CrawlRulesBuilder;
 import com.crawljax.core.plugin.Plugin;
 import com.crawljax.core.state.StateVertexFactory;
+import com.crawljax.core.state.duplicatedetection.FeatureType;
 import com.crawljax.domcomparators.DomStructureStripper;
 import com.crawljax.domcomparators.AttributesStripper;
 import com.crawljax.domcomparators.DomStripper;
@@ -129,6 +132,11 @@ public class CrawljaxConfiguration {
 			Preconditions.checkArgument(threshold <= 32,
 					"The theshold should be smaller or equal to " + 32);
 			config.thresholdNearDuplicateDetection = threshold;
+			return this;
+		}
+		
+		public CrawljaxConfigurationBuilder setFeaturesNearDuplicateDetection(List<FeatureType> features) {
+			config.featuresNearDuplicateDetection = features;
 			return this;
 		}
 		
@@ -318,6 +326,7 @@ public class CrawljaxConfiguration {
 	private int maximumDepth = 2;
 	private File output = new File("out");
 	private double thresholdNearDuplicateDetection = 3;
+	public List<FeatureType> featuresNearDuplicateDetection = new ArrayList<FeatureType>();
 
 	private StateVertexFactory stateVertexFactory;
 
@@ -364,6 +373,10 @@ public class CrawljaxConfiguration {
 		return thresholdNearDuplicateDetection;
 	}
 
+	public List<FeatureType> getFeaturesNearDuplicateDetection() { 
+		return featuresNearDuplicateDetection;
+	}
+	
 	public ImmutableList<DomStripper> getStrippers() {
 		return strippers;
 	}

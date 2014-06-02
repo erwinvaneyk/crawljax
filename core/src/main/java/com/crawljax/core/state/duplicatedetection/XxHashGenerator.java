@@ -1,5 +1,7 @@
 package com.crawljax.core.state.duplicatedetection;
 
+import com.google.inject.Inject;
+
 import net.jpountz.xxhash.XXHash32;
 import net.jpountz.xxhash.XXHashFactory;
 
@@ -13,6 +15,7 @@ public class XxHashGenerator implements HashGenerator {
 	/**
 	 * Setup the xxHash-32 hash-generator
 	 */
+	@Inject
 	public XxHashGenerator() {
 		xxhash = XXHashFactory.fastestInstance().hash32();
 	}
