@@ -108,6 +108,16 @@ footer small {
 				</div>
 			</div>
 		</div>
+		
+		<div id="duplicate-detection-slider" style="width:35%; margin:auto; text-align:center;">
+			Remove duplicate states: <input type="range"  min=${stats.duplicateDetectionTreshold} max="1" value=${stats.duplicateDetectionTreshold} step="0.1" onchange="changeTreshold(this.value)" />
+			<script type="text/javascript">
+				function changeTreshold(newValue) {
+					alert("boe");
+				}
+			</script>
+		</div>
+		
 		<div class="container page" id="container-statistics" style="display: none;">
 			#parse( "statistics.html" )
 		</div>
