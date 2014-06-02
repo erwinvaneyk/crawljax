@@ -62,28 +62,7 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 		}
 		return hashes;
 	}
-
-	/**
-	 * Checks the precondition for the feature-list, which should not be empty or null.
-	 * @param features feature-list to be checked
-	 */
-	private void checkPreconditionsFeatures(List<FeatureType> features) {
-		if(features == null || features.isEmpty()) {
-			throw new FeatureException("Invalid feature-list provided, feature-list cannot be null or empty.");
-		}		
-	}
-
-	/**'
-	 * Checks the precondition for the threshold, which should be within the predefined upper and lower bounds.
-	 * @param threshold
-	 */
-	private void checkPreconditionsThreshold(double threshold) {
-		if(threshold > THRESHOLD_UPPERLIMIT || threshold < THRESHOLD_LOWERLIMIT) {
-			throw new FeatureException("Invalid threshold value " + threshold + ", threshold as to "
-					+ "be between " + THRESHOLD_LOWERLIMIT + " and " + THRESHOLD_UPPERLIMIT + ".");
-		}
-	}
-
+	
 	/**
 	 * Return true if the JaccardCoefficient is higher than the threshold.
 	 */
@@ -92,6 +71,7 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 		return (this.getDistance(state1, state2) >= this.threshold);
 	}
 	
+
 	/**
 	 * Get the distance between two sets.
 	 * @return One if both sets are completely different and zero if the two sets are exactly the same.
@@ -113,12 +93,12 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 			setOfSecondArg.add(state2[j]);
 		}
 		
-		double unionCount = this.unionCount(setOfFirstArg, setOfSecondArg);
-		double intersectionCount = this.intersectionCount(setOfFirstArg, setOfSecondArg);
+		double unionCount = Sets.union(setOfFirstArg, setOfSecondArg).size();
+		double intersectionCount =Sets.intersection(setOfFirstArg, setOfSecondArg).size();
 		
 		return (intersectionCount / unionCount);
 	}
-	
+
 	/**
 	 * Generate the features from the content of the state.
 	 * @param doc The content of the state
@@ -133,17 +113,28 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 		}
 		return li;
 	}
-	
-	private int unionCount(Set<Integer> list1, Set<Integer> list2) {
-		Set<Integer> union = Sets.union(list1, list2);
-		return union.size();
-	}
-	
-	private int intersectionCount(Set<Integer> list1, Set<Integer> list2) {
-		Set<Integer> intersection = Sets.intersection(list1, list2);
-		return intersection.size();
+
+	/**
+	 * Checks the precondition for the feature-list, which should not be empty or null.
+	 * @param features feature-list to be checked
+	 */
+	private void checkPreconditionsFeatures(List<FeatureType> features) {
+		if(features == null || features.isEmpty()) {
+			throw new FeatureException("Invalid feature-list provided, feature-list cannot be null or empty. (Provided: " + features + ")");
+		}		
 	}
 
+	/**'
+	 * Checks the precondition for the threshold, which should be within the predefined upper and lower bounds.
+	 * @param threshold
+	 */
+	private void checkPreconditionsThreshold(double threshold) {
+		if(threshold > THRESHOLD_UPPERLIMIT || threshold < THRESHOLD_LOWERLIMIT) {
+			throw new FeatureException("Invalid threshold value " + threshold + ", threshold as to "
+					+ "be between " + THRESHOLD_LOWERLIMIT + " and " + THRESHOLD_UPPERLIMIT + ".");
+		}
+	}
+	
 	public double getTreshold() {
 		return threshold;
 	}

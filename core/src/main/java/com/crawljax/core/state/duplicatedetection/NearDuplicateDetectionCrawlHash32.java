@@ -112,7 +112,7 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 	 */
 	private void checkPreconditionsFeatures(List<FeatureType> features) {
 		if(features == null || features.isEmpty()) {
-			throw new FeatureException("Invalid feature-list provided, feature-list cannot be null or empty.");
+			throw new FeatureException("Invalid feature-list provided, feature-list cannot be null or empty. (Provided: " + features + ")");
 		}		
 	}
 
