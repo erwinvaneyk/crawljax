@@ -1,5 +1,7 @@
 package com.crawljax.core.state.duplicatedetection;
 
+import java.util.List;
+
 /**
  * Settings:
  * - Features
@@ -14,4 +16,12 @@ public interface NearDuplicateDetection {
 	public boolean isNearDuplicateHash(int[] hash1, int[] hash2);
 		
 	public double getDistance(int[] hash1, int[] hash2);
+	
+	public void setThreshold(double threshold);
+
+	public List<FeatureType> getFeatures();
+
+	public HashGenerator getHashGenerator();
+
+	public void setFeatures(List<FeatureType> features);
 }

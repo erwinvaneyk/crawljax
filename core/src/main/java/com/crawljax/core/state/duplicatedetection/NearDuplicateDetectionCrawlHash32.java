@@ -3,22 +3,37 @@ package com.crawljax.core.state.duplicatedetection;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Singleton;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
 
+@Singleton
 public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection {
 
-	private static final Logger logger = LoggerFactory.getLogger(NearDuplicateDetectionCrawlHash32.class);
+	private static final Logger LOG = LoggerFactory.getLogger(NearDuplicateDetectionCrawlHash32.class);
 	
 	private List<FeatureType> features;
 	private double threshold;
 	private HashGenerator hashGenerator;
 	
+	@Inject
+	public NearDuplicateDetectionCrawlHash32(HashGenerator hg) {
+		this.hashGenerator = hg;
+		fillFeatures(null);
+		this.threshold = 0;
+	}
+	
 	public NearDuplicateDetectionCrawlHash32(double threshold, List<FeatureType> fs, HashGenerator hg) {
 		this.hashGenerator = hg;
-		this.features = fs;
+		fillFeatures(fs);
 		this.threshold = threshold;
+	}
+	
+	private void fillFeatures(List<FeatureType> fs) {
+		this.features = fs != null ? fs : new ArrayList<FeatureType>();
 	}
 	
 	private List<String> generateFeatures(String doc) throws FeatureException {
@@ -68,7 +83,7 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 
 	@Override
 	public boolean isNearDuplicateHash(int[] hash1, int[] hash2) {
-		logger.debug("Comparing hash {} with hash {} using a threshold of {}", hash1[0], hash2[0], threshold);
+		LOG.info("Comparing hash {} with hash {} using a threshold of {}", hash1[0], hash2[0], threshold);
 		return ((double) hammingDistance(hash1[0],hash2[0])) <= threshold;
 	}
 	
@@ -79,5 +94,23 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 	@Override
 	public double getDistance(int[] hash1, int[] hash2) {
 		return hammingDistance(hash1[0], hash2[0]);
+	}
+
+	public List<FeatureType> getFeatures() {
+		return features;
+	}
+
+	public HashGenerator getHashGenerator() {
+		return hashGenerator;
+	}
+
+	@Override
+	public void setThreshold(double threshold) {
+		this.threshold = threshold;
+		
+	}
+
+	public void setFeatures(List<FeatureType> features) {
+		this.features = features;
 	}
 }

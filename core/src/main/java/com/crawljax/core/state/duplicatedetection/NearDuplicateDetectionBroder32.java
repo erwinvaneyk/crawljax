@@ -5,11 +5,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Singleton;
+
 import com.google.common.collect.Sets;
+import com.google.inject.Inject;
 
 /**
  * Near-duplicate detection based on the Jaccard coefficient and shingles.
  */
+@Singleton
 public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 
 	private List<FeatureType> features;
@@ -18,8 +22,19 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	
 	public NearDuplicateDetectionBroder32(double t, List<FeatureType> fs, HashGenerator hg) {
 		this.treshold = t;
-		this.features = fs;
 		this.hashGenerator = hg;
+		fillFeatures(fs);
+	}
+	
+	@Inject
+	public NearDuplicateDetectionBroder32(HashGenerator hg) {
+		this.treshold = 3; //TODO Guice annotated?
+		this.hashGenerator = hg;
+		fillFeatures(null);
+	}
+	
+	private void fillFeatures(List<FeatureType> fs) {
+		this.features = fs != null ? fs : new ArrayList<FeatureType>();
 	}
 	
 	/**
@@ -40,7 +55,7 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	}
 
 	/**
-	 * Return true if the JaccardCoefficient is higher than the treshold.
+	 * Return true if the JaccardCoefficient is higher than the threshold.
 	 */
 	@Override
 	public boolean isNearDuplicateHash(int[] state1, int[] state2) {
@@ -59,8 +74,8 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	}
 	
 	private double getJaccardCoefficient(int[] state1, int[] state2) {
-		HashSet<Integer> setOfFirstArg = new HashSet<Integer>();
-		HashSet<Integer> setOfSecondArg = new HashSet<Integer>();
+		Set<Integer> setOfFirstArg = new HashSet<Integer>(state1.length);
+		Set<Integer> setOfSecondArg = new HashSet<Integer>(state2.length);
 		for (int i=0; i<state1.length; i++) {
 			setOfFirstArg.add(state1[i]);
 		}
@@ -98,4 +113,24 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 		Set<Integer> intersection = Sets.intersection(list1, list2);
 		return intersection.size();
 	}
+
+	public double getTreshold() {
+		return treshold;
+	}
+
+	public void setThreshold(double threshold) {
+		this.treshold = threshold;
+	}
+
+	public List<FeatureType> getFeatures() {
+		return features;
+	}
+
+	public HashGenerator getHashGenerator() {
+		return hashGenerator;
+	}
+	
+	public void setFeatures(List<FeatureType> features) {
+		this.features = features;	
+	}	
 }
