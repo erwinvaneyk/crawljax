@@ -34,6 +34,7 @@ public class StateVertexNDD implements StateVertex {
 	private String name;
 
 	private ImmutableList<CandidateElement> candidateElements;
+	private double minDuplicateDistance;
 
 	/**
 	 * Creates a current state without an url and the stripped dom equals the dom.
@@ -75,6 +76,7 @@ public class StateVertexNDD implements StateVertex {
 			LOGGER.error(e.getMessage());
 			e.printStackTrace();
 		}
+		this.minDuplicateDistance = 32;
 	}
 
 	@Override
@@ -150,5 +152,13 @@ public class StateVertexNDD implements StateVertex {
 			}
 		}
 		return false;
+	}
+	
+	public double getMinDuplicateDistance() {
+		return minDuplicateDistance;
+	}
+	
+	public void setMinDuplicateDistance(double minDuplicateDistance) {
+		this.minDuplicateDistance = minDuplicateDistance;
 	}
 }

@@ -31,6 +31,8 @@ public class CrawljaxConfiguration {
 
 	public static class CrawljaxConfigurationBuilder {
 
+		public static final int LENGTH_OF_DUPLICATE_DETECTION_HASH = 32;
+		
 		private final ImmutableList.Builder<Plugin> pluginBuilder = ImmutableList.builder();
 		private final ImmutableList.Builder<ValidDomStripper> validStrippers = ImmutableList.builder();
 		private final ImmutableList.Builder<DomStripper> strippers = ImmutableList.builder();
@@ -317,7 +319,7 @@ public class CrawljaxConfiguration {
 	;
 	private int maximumDepth = 2;
 	private File output = new File("out");
-	private double thresholdNearDuplicateDetection = 3;
+	private double thresholdNearDuplicateDetection = 5;
 
 	private StateVertexFactory stateVertexFactory;
 

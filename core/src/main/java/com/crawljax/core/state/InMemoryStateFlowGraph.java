@@ -15,11 +15,13 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.crawljax.core.ExitNotifier;
+import com.crawljax.core.state.duplicatedetection.NearDuplicateDetectionSingleton;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.math.stat.descriptive.moment.Mean;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.GraphPath;
@@ -37,7 +39,7 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("serial")
 public class InMemoryStateFlowGraph implements Serializable, StateFlowGraph {
 
-	private static final Logger LOG = LoggerFactory.getLogger(InMemoryStateFlowGraph.class
+	private static final Logger LOGGER = LoggerFactory.getLogger(InMemoryStateFlowGraph.class
 	        .getName());
 
 	private final DirectedGraph<StateVertex, Eventable> sfg;
@@ -66,7 +68,7 @@ public class InMemoryStateFlowGraph implements Serializable, StateFlowGraph {
 		this.vertexFactory = vertexFactory;
 		sfg = new DirectedMultigraph<>(Eventable.class);
 		stateById = Maps.newConcurrentMap();
-		LOG.debug("Initialized the stateflowgraph");
+		LOGGER.debug("Initialized the stateflowgraph");
 		ReadWriteLock lock = new ReentrantReadWriteLock();
 		readLock = lock.readLock();
 		writeLock = lock.writeLock();
@@ -113,16 +115,18 @@ public class InMemoryStateFlowGraph implements Serializable, StateFlowGraph {
 	private StateVertex putIfAbsent(StateVertex stateVertix, boolean correctName) {
 		writeLock.lock();
 		try {
-			boolean added = sfg.addVertex(stateVertix);
-			if (added) {
+			boolean duplicate = this.hasNearDuplicate(stateVertix);
+
+			if (!duplicate) {
+				sfg.addVertex(stateVertix);
 				stateById.put(stateVertix.getId(), stateVertix);
 				int count = stateCounter.incrementAndGet();
 				exitNotifier.incrementNumberOfStates();
-				LOG.debug("Number of states is now {}", count);
+				LOGGER.debug("Number of states is now {}", count);
 				return null;
 			} else {
 				// Graph already contained the vertex
-				LOG.debug("Graph already contained vertex {}", stateVertix);
+				LOGGER.debug("Graph already contained vertex {}", stateVertix);
 				return this.getStateInGraph(stateVertix);
 			}
 		} finally {
@@ -130,6 +134,31 @@ public class InMemoryStateFlowGraph implements Serializable, StateFlowGraph {
 		}
 	}
 
+	private boolean hasNearDuplicate(StateVertex vertex) {
+		for (StateVertex vertexOfGraph : sfg.vertexSet()) {
+			
+			if (vertex instanceof StateVertexNDD) {
+				StateVertexNDD vertexNDD = (StateVertexNDD) vertex;
+				StateVertexNDD vertexOfGraphNDD = (StateVertexNDD) vertexOfGraph;
+				updateMinDuplicateDistance(vertexNDD, vertexOfGraphNDD);
+			}
+			
+			if (vertex.equals(vertexOfGraph)) {
+				LOGGER.info("Duplicate found: {}, {}", vertex.getId(), vertexOfGraph.getId());
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private void updateMinDuplicateDistance(StateVertexNDD vertex, StateVertexNDD vertexFromSFG) {
+		double duplicateDistance = NearDuplicateDetectionSingleton.getInstance().getDistance(vertex.getHashes(), vertexFromSFG.getHashes());
+		
+		if (duplicateDistance < vertex.getMinDuplicateDistance()) {
+			vertex.setMinDuplicateDistance(duplicateDistance);
+			LOGGER.error("UPDATE minDuplicateDistance to {} at ({},{})", duplicateDistance, vertex.getId(), vertexFromSFG.getId());
+		}
+	}
 
 	@Override
 	public StateVertex getById(int id) {

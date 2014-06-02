@@ -19,7 +19,10 @@ public class NearDuplicateDetectionSingleton {
 	 */
 	public static NearDuplicateDetection getInstance() {
 		if (ndd == null) {
-			ndd = new NearDuplicateDetectionBroder32(threshold, features, hashGeneratorFactory.getInstance());
+
+			ndd =
+			        new NearDuplicateDetectionCrawlHash32(threshold, features,
+			                hashGeneratorFactory.getInstance());
 		}
 		return ndd;
 	}
