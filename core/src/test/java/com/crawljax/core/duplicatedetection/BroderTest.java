@@ -23,7 +23,7 @@ public class BroderTest {
 	@Test
 	public void testGenerateHash() throws FeatureException {
 		features.add(new FeatureShingles(2, FeatureShingles.SizeType.WORDS));
-		HashGenerator hasher = new XxHashGeneratorFactory().getInstance();
+		HashGenerator hasher = new XxHashGenerator();
 		NearDuplicateDetectionBroder32 broder = new NearDuplicateDetectionBroder32(0.8, features, hasher);
 		
 		String testDoc = "This will be a test";
