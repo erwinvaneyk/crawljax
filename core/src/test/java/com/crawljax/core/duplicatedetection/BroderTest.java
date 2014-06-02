@@ -18,7 +18,7 @@ public class BroderTest {
 	@Test
 	public void testGenerateHash() throws FeatureException {
 		features.add(new FeatureShingles(2, FeatureShingles.SizeType.WORDS));
-		HashGenerator hasher = new XxHashGeneratorFactory().getInstance();
+		HashGenerator hasher = new XxHashGenerator();
 		NearDuplicateDetectionBroder32 broder = new NearDuplicateDetectionBroder32(0.8, features, hasher);
 		
 		String testDoc = "This will be a test";
@@ -32,7 +32,7 @@ public class BroderTest {
 	@Test
 	public void testGetDistance1() throws FeatureException {
 		features.add(new FeatureShingles(2, FeatureShingles.SizeType.WORDS));
-		HashGenerator hasher = new XxHashGeneratorFactory().getInstance();
+		HashGenerator hasher = new XxHashGenerator();
 		NearDuplicateDetectionBroder32 broder = new NearDuplicateDetectionBroder32(0.8, features, hasher);
 		
 		int[] set1 = {1010, 1110, 1011, 0000};
@@ -45,7 +45,7 @@ public class BroderTest {
 	@Test
 	public void testGetDistance2() throws FeatureException {
 		features.add(new FeatureShingles(2, FeatureShingles.SizeType.WORDS));
-		HashGenerator hasher = new XxHashGeneratorFactory().getInstance();
+		HashGenerator hasher = new XxHashGenerator();
 		NearDuplicateDetectionBroder32 broder = new NearDuplicateDetectionBroder32(0.8, features, hasher);
 		
 		int[] set1 = {1111};
@@ -58,7 +58,7 @@ public class BroderTest {
 	@Test
 	public void testGetDistance3() throws FeatureException {
 		features.add(new FeatureShingles(2, FeatureShingles.SizeType.WORDS));
-		HashGenerator hasher = new XxHashGeneratorFactory().getInstance();
+		HashGenerator hasher = new XxHashGenerator();
 		NearDuplicateDetectionBroder32 broder = new NearDuplicateDetectionBroder32(0.8, features, hasher);
 		
 		int[] set1 = {1111, 0000, 1010, 0101};
@@ -71,7 +71,7 @@ public class BroderTest {
 	@Test
 	public void testIsNearDuplicateHash1() throws FeatureException {
 		features.add(new FeatureShingles(2, FeatureShingles.SizeType.WORDS));
-		HashGenerator hasher = new XxHashGeneratorFactory().getInstance();
+		HashGenerator hasher = new XxHashGenerator();
 		NearDuplicateDetectionBroder32 broder = new NearDuplicateDetectionBroder32(0.8, features, hasher);
 		
 		int[] set1 = {1111, 0000, 1010, 0101};
@@ -84,7 +84,7 @@ public class BroderTest {
 	@Test
 	public void testIsNearDuplicateHashOnBoundary() throws FeatureException {
 		features.add(new FeatureShingles(2, FeatureShingles.SizeType.WORDS));
-		HashGenerator hasher = new XxHashGeneratorFactory().getInstance();
+		HashGenerator hasher = new XxHashGenerator();
 		NearDuplicateDetectionBroder32 broder = new NearDuplicateDetectionBroder32(4.0/6.0, features, hasher);
 		
 		int[] set1 = {1111, 0000, 1010, 0101, 1110};
@@ -97,7 +97,7 @@ public class BroderTest {
 	@Test
 	public void testIsNearDuplicateHashOffBoundary() throws FeatureException {
 		features.add(new FeatureShingles(2, FeatureShingles.SizeType.WORDS));
-		HashGenerator hasher = new XxHashGeneratorFactory().getInstance();
+		HashGenerator hasher = new XxHashGenerator();
 		NearDuplicateDetectionBroder32 broder = new NearDuplicateDetectionBroder32(4.0/6.0 + 0.001, features, hasher);
 		
 		int[] set1 = {1111, 0000, 1010, 0101, 1110};
