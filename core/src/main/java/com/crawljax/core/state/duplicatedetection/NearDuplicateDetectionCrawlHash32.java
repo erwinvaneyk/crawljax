@@ -148,7 +148,7 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 	}
 
 	public void setFeatures(List<FeatureType> features) {
-		checkPreconditionsFeatures(features);
+		checkPreconditionsFeatures(features); 
 		this.features = features;
 	}
 }

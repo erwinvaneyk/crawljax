@@ -143,7 +143,7 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 		}
 	}
 	
-	public double getTreshold() {
+	public double getThreshold() {
 		return threshold;
 	}
 
@@ -159,5 +159,5 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	public void setFeatures(List<FeatureType> features) {
 		checkPreconditionsFeatures(features);
 		this.features = features;	
-	}	
+	}
 }

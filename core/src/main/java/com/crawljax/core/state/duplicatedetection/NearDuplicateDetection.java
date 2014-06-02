@@ -48,4 +48,6 @@ public interface NearDuplicateDetection {
 	public void setThreshold(double threshold);
 
 	public void setFeatures(List<FeatureType> features);
+	
+	public double getThreshold();
 }
