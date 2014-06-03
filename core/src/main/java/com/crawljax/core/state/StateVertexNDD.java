@@ -11,8 +11,6 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 /**
@@ -31,7 +29,9 @@ public class StateVertexNDD implements StateVertex {
 	private String name;
 
 	private ImmutableList<CandidateElement> candidateElements;
+
 	private NearDuplicateDetection nearDuplicateDetection;
+
 	private double minDuplicateDistance;
 
 	/**

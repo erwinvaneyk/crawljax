@@ -32,7 +32,9 @@ import com.google.common.collect.ImmutableList;
  */
 public class CrawljaxConfiguration {
 
+
 	public static class CrawljaxConfigurationBuilder {
+
 		public static final int LENGTH_OF_DUPLICATE_DETECTION_HASH = 32;
 		
 		private final ImmutableList.Builder<Plugin> pluginBuilder = ImmutableList.builder();
@@ -330,9 +332,11 @@ public class CrawljaxConfiguration {
 	;
 	private int maximumDepth = 2;
 	private File output = new File("out");
+
 	
 	private double thresholdNearDuplicateDetection = 3;
 	public List<FeatureType> featuresNearDuplicateDetection = new ArrayList<FeatureType>();
+
 	private StateVertexFactory stateVertexFactory;
 
 	private CrawljaxConfiguration() {

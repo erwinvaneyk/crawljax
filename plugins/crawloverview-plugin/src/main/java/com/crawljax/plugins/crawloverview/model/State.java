@@ -46,7 +46,6 @@ public class State {
 			int[] hashCode = new int[1];
 			hashCode[0] = state.hashCode();
 			this.hash = hashCode;
-
 			this.minDuplicateDistance = CrawljaxConfigurationBuilder.LENGTH_OF_DUPLICATE_DETECTION_HASH;
 		}
 	}
