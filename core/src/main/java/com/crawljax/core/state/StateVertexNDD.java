@@ -4,10 +4,15 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import com.crawljax.core.CandidateElement;
+import com.crawljax.core.state.duplicatedetection.NearDuplicateDetection;
 import com.crawljax.util.DomUtils;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
+import com.google.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 /**
@@ -15,17 +20,20 @@ import org.w3c.dom.Document;
  * candidate elements every time a candidate is returned its removed from the list so it is a one
  * time only access to the candidates.
  */
-class StateVertexImpl implements StateVertex {
-
-	private static final long serialVersionUID = 123400017983488L;
+@SuppressWarnings("serial")
+public class StateVertexNDD implements StateVertex {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(StateMachine.class.getName());
 
 	private final int id;
 	private final String dom;
 	private final String strippedDom;
 	private final String url;
+	private int[] hash;
 	private String name;
 
 	private ImmutableList<CandidateElement> candidateElements;
+	private NearDuplicateDetection nearDuplicateDetection;
 
 	/**
 	 * Creates a current state without an url and the stripped dom equals the dom.
@@ -35,9 +43,11 @@ class StateVertexImpl implements StateVertex {
 	 * @param dom
 	 *            the current DOM tree of the browser
 	 */
+	@Inject
 	@VisibleForTesting
-	StateVertexImpl(int id, String name, String dom) {
-		this(id, null, name, dom, dom);
+	StateVertexNDD(int id, String name, String dom, NearDuplicateDetection ndd) {
+		this(id, null, name, dom, dom, ndd);
+		
 	}
 
 	/**
@@ -52,12 +62,15 @@ class StateVertexImpl implements StateVertex {
 	 * @param strippedDom
 	 *            the stripped dom by the OracleComparators
 	 */
-	public StateVertexImpl(int id, String url, String name, String dom, String strippedDom) {
+	@Inject
+	public StateVertexNDD(int id, String url, String name, String dom, String strippedDom, NearDuplicateDetection ndd) {
 		this.id = id;
 		this.url = url;
 		this.name = name;
 		this.dom = dom;
+		this.nearDuplicateDetection = ndd;
 		this.strippedDom = strippedDom;
+		this.hash = ndd.generateHash(strippedDom);
 	}
 
 	@Override
@@ -80,16 +93,15 @@ class StateVertexImpl implements StateVertex {
 		return url;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(strippedDom);
+	public int[] getHashes() {
+		return this.hash;
 	}
 
 	@Override
 	public boolean equals(Object object) {
 		if (object instanceof StateVertex) {
-			StateVertex that = (StateVertex) object;
-			return Objects.equal(this.strippedDom, that.getStrippedDom());
+			StateVertexNDD that = (StateVertexNDD) object;
+			return nearDuplicateDetection.isNearDuplicateHash(this.getHashes(), that.getHashes());
 		}
 		return false;
 	}
@@ -122,5 +134,4 @@ class StateVertexImpl implements StateVertex {
 	public ImmutableList<CandidateElement> getCandidateElements() {
 		return candidateElements;
 	}
-
 }

@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.crawljax.browser.EmbeddedBrowser.BrowserType;
@@ -14,6 +16,7 @@ import com.crawljax.core.CrawljaxException;
 import com.crawljax.core.configuration.CrawlRules.CrawlRulesBuilder;
 import com.crawljax.core.plugin.Plugin;
 import com.crawljax.core.state.StateVertexFactory;
+import com.crawljax.core.state.duplicatedetection.FeatureType;
 import com.crawljax.domcomparators.DomStructureStripper;
 import com.crawljax.domcomparators.AttributesStripper;
 import com.crawljax.domcomparators.DomStripper;
@@ -31,6 +34,8 @@ public class CrawljaxConfiguration {
 
 	public static class CrawljaxConfigurationBuilder {
 
+		private final int LENGTH_OF_DUPLICATE_DETECTION_HASH = 32;
+		
 		private final ImmutableList.Builder<Plugin> pluginBuilder = ImmutableList.builder();
 		private final ImmutableList.Builder<ValidDomStripper> validStrippers = ImmutableList.builder();
 		private final ImmutableList.Builder<DomStripper> strippers = ImmutableList.builder();
@@ -119,16 +124,25 @@ public class CrawljaxConfiguration {
 		}
 
 		/**
-		 * @param threshold The threshold that will be used for the hammingdistance comparison.
-		 * Two states are near-duplicates if the hammingdistance between the two hashes 
+		 * @param threshold The threshold that will be used for the Hamming distance comparison.
+		 * Two states are near-duplicates if the Hamming distance between the two hashes 
 		 * are less or equal than the threshold.
 		 */
-		public CrawljaxConfigurationBuilder setThresholdNearDuplicateDetection(int threshold) {
+		public CrawljaxConfigurationBuilder setThresholdNearDuplicateDetection(double threshold) {
 			Preconditions.checkArgument(threshold >= 0,
 					"The theshold should be greater or equal to 0.");
-			Preconditions.checkArgument(threshold <= 32,
+			Preconditions.checkArgument(threshold <= LENGTH_OF_DUPLICATE_DETECTION_HASH,
 					"The theshold should be smaller or equal to " + 32);
 			config.thresholdNearDuplicateDetection = threshold;
+			return this;
+		}
+		
+		/**
+		 * @param features The features that will be used to in the Near-Duplicate Detection algorithm.
+		 * Features determine how the relevant (stripped) content of a page is processed into a hash.  
+		 */
+		public CrawljaxConfigurationBuilder setFeaturesNearDuplicateDetection(List<FeatureType> features) {
+			config.featuresNearDuplicateDetection = features;
 			return this;
 		}
 		
@@ -317,7 +331,8 @@ public class CrawljaxConfiguration {
 	;
 	private int maximumDepth = 2;
 	private File output = new File("out");
-	private int thresholdNearDuplicateDetection = 3;
+	private double thresholdNearDuplicateDetection = 3;
+	public List<FeatureType> featuresNearDuplicateDetection = new ArrayList<FeatureType>();
 
 	private StateVertexFactory stateVertexFactory;
 
@@ -360,10 +375,14 @@ public class CrawljaxConfiguration {
 		return output;
 	}
 	
-	public int getThresholdNearDuplicateDetection() {
+	public double getThresholdNearDuplicateDetection() {
 		return thresholdNearDuplicateDetection;
 	}
 
+	public List<FeatureType> getFeaturesNearDuplicateDetection() { 
+		return featuresNearDuplicateDetection;
+	}
+	
 	public ImmutableList<DomStripper> getStrippers() {
 		return strippers;
 	}
