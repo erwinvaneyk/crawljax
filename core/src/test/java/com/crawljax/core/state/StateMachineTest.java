@@ -8,6 +8,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import com.crawljax.core.configuration.CrawlRules;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,8 @@ import com.crawljax.core.plugin.OnNewStatePlugin;
 import com.crawljax.core.plugin.Plugins;
 import com.crawljax.core.state.Eventable.EventType;
 import com.crawljax.core.state.Identification.How;
+import com.crawljax.core.state.duplicatedetection.NearDuplicateDetectionBroder32;
+import com.crawljax.core.state.duplicatedetection.XxHashGenerator;
 import com.crawljax.domcomparators.DomStrippers;
 import com.google.common.collect.ImmutableList;
 
@@ -237,7 +240,7 @@ public class StateMachineTest {
 	}
 
 	private InMemoryStateFlowGraph newStateFlowGraph() {
-		InMemoryStateFlowGraph sfg = new InMemoryStateFlowGraph(new ExitNotifier(0), new DefaultStateVertexFactory());
+		InMemoryStateFlowGraph sfg = new InMemoryStateFlowGraph(new ExitNotifier(0), new DefaultStateVertexFactory(), new NearDuplicateDetectionBroder32(new XxHashGenerator()));
 		sfg.putIndex(index);
 		return sfg;
 	}
