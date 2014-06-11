@@ -178,20 +178,36 @@ footer small {
 					document.getElementById("thresholdValue").innerHTML = "Threshold: " + threshold;
 					
 					var statesInGraph = [];
-					#foreach( $state in $sortedStates )
+					var sortedStates = Object.keys(states).sort(function(a,b){return states[a].id-states[b].id})
+					for (var state in sortedStates) {
+						if(canBeReachedFromIndex(state, statesInGraph)) {
+							removeIfDuplicate(state, statesInGraph);
+						}
+					}
+					loadPage("graph");	
+					
+					function removeIfDuplicate(currentState, statesInGraph) {
 						var inGraph = true;
-						var currentState = states.$state;
-						for (var key in currentState.duplicateDistance) {
-							if ($.inArray(key, statesInGraph.name) && currentState.duplicateDistance[key]< threshold) {
+						for (var otherStateId in currentState.duplicateDistance) {
+							if ($.inArray(otherStateId, statesInGraph) && currentState.duplicateDistance[otherStateId] < threshold) {
 								graph.removeNode(currentState.name);
 								inGraph = false;
 							}
 						}
 						if (inGraph) {
-							statesInGraph.push(currentState.name);
+							statesInGraph.push(currentState.id);
 						}
-					#end
-					loadPage("graph");	
+					}
+					
+					function canBeReachedFromIndex(currentState, statesInGraph) {
+						if(currentState.name == "index") return true;
+						for(var edge in edges) {
+							if(edge.to == currentState.name && $.inArray(states[edge.from].id, statesInGraph) {
+								return true;								
+							}
+						}
+						return false;
+					}
 				});
 					
 					$("#hideButton").click(function() {
