@@ -1,5 +1,7 @@
 package com.crawljax.plugins.crawloverview.model;
 
+import java.util.HashMap;
+
 import javax.annotation.concurrent.Immutable;
 
 import com.crawljax.core.configuration.CrawljaxConfiguration.CrawljaxConfigurationBuilder;
@@ -26,10 +28,11 @@ public class State {
 	// minDuplicateDistance is the distance to the state that has most in common with this state
 	// or is most likely a duplicate of this state.
 	private final double minDuplicateDistance;
-
+	private final HashMap<Integer,Double> duplicateDistance;
+	
 	public State(StateVertex state, int fanIn, int fanOut,
 	        ImmutableList<CandidateElementPosition> candidates,
-	        ImmutableList<String> failedEvents) {
+	        ImmutableList<String> failedEvents, HashMap<Integer,Double> differenceDistance) {
 		this.fanIn = fanIn;
 		this.fanOut = fanOut;
 		candidateElements = candidates;
@@ -37,6 +40,7 @@ public class State {
 		this.name = state.getName();
 		this.url = state.getUrl();
 		this.id = state.getId();
+		this.duplicateDistance = differenceDistance;
 
 		if (state instanceof StateVertexNDD) {
 			StateVertexNDD stateNDD = (StateVertexNDD) state;
@@ -59,7 +63,8 @@ public class State {
 	        @JsonProperty("fanIn") int fanIn, @JsonProperty("fanOut") int fanOut,
 	        @JsonProperty("hash") int[] hash, @JsonProperty("id") int id,
 	        @JsonProperty("failedEvents") ImmutableList<String> failedEvents,
-	        @JsonProperty("minDuplicateDistance") double minDuplicateDistance) {
+	        @JsonProperty("minDuplicateDistance") double minDuplicateDistance,
+	        @JsonProperty("differenceDistance") HashMap<Integer,Double> duplicateDistance) {
 		super();
 		this.name = name;
 		this.url = url;
@@ -70,6 +75,7 @@ public class State {
 		this.id = id;
 		this.failedEvents = failedEvents;
 		this.minDuplicateDistance = minDuplicateDistance;
+		this.duplicateDistance = duplicateDistance;
 	}
 
 	public String getName() {
@@ -114,6 +120,9 @@ public class State {
 		        id, failedEvents);
 	}
 
+	public HashMap<Integer,Double> getDuplicateDistance() {
+		return duplicateDistance;
+	}
 	@Override
 	public boolean equals(Object object) {
 		if (object instanceof State) {
