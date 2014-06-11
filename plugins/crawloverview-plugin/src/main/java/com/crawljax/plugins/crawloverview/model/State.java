@@ -4,9 +4,7 @@ import java.util.HashMap;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.crawljax.core.configuration.CrawljaxConfiguration.CrawljaxConfigurationBuilder;
 import com.crawljax.core.state.StateVertex;
-import com.crawljax.core.state.StateVertexNDD;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,12 +20,8 @@ public class State {
 	private final ImmutableList<CandidateElementPosition> candidateElements;
 	private final int fanIn;
 	private final int fanOut;
-	private final int[] hash;
 	private final int id;
 	private final ImmutableList<String> failedEvents;
-	// minDuplicateDistance is the distance to the state that has most in common with this state
-	// or is most likely a duplicate of this state.
-	private final double minDuplicateDistance;
 	private final HashMap<String,Double> duplicateDistance;
 	
 	public State(StateVertex state, int fanIn, int fanOut,
@@ -41,17 +35,6 @@ public class State {
 		this.url = state.getUrl();
 		this.id = state.getId();
 		this.duplicateDistance = differenceDistance;
-
-		if (state instanceof StateVertexNDD) {
-			StateVertexNDD stateNDD = (StateVertexNDD) state;
-			this.hash = stateNDD.getHashes();
-			this.minDuplicateDistance = stateNDD.getMinDuplicateDistance();
-		} else {
-			int[] hashCode = new int[1];
-			hashCode[0] = state.hashCode();
-			this.hash = hashCode;
-			this.minDuplicateDistance = CrawljaxConfigurationBuilder.LENGTH_OF_DUPLICATE_DETECTION_HASH;
-		}
 	}
 
 	@JsonCreator
@@ -60,9 +43,8 @@ public class State {
 	        @JsonProperty("url") String url,
 	        @JsonProperty("candidateElements") ImmutableList<CandidateElementPosition> candidateElements,
 	        @JsonProperty("fanIn") int fanIn, @JsonProperty("fanOut") int fanOut,
-	        @JsonProperty("hash") int[] hash, @JsonProperty("id") int id,
+	        @JsonProperty("id") int id,
 	        @JsonProperty("failedEvents") ImmutableList<String> failedEvents,
-	        @JsonProperty("minDuplicateDistance") double minDuplicateDistance,
 	        @JsonProperty("differenceDistance") HashMap<String,Double> duplicateDistance) {
 		super();
 		this.name = name;
@@ -70,10 +52,8 @@ public class State {
 		this.candidateElements = candidateElements;
 		this.fanIn = fanIn;
 		this.fanOut = fanOut;
-		this.hash = hash;
 		this.id = id;
 		this.failedEvents = failedEvents;
-		this.minDuplicateDistance = minDuplicateDistance;
 		this.duplicateDistance = duplicateDistance;
 	}
 
@@ -97,9 +77,6 @@ public class State {
 		return fanOut;
 	}
 	
-	public int[] getHash() {
-		return hash;
-	}
 
 	public int getId() {
 		return id;
@@ -107,10 +84,6 @@ public class State {
 
 	public ImmutableList<String> getFailedEvents() {
 		return failedEvents;
-	}
-	
-	public double getMinDuplicateDistance() {
-		return minDuplicateDistance;
 	}
 
 	@Override
@@ -133,7 +106,6 @@ public class State {
 			                that.candidateElements)
 			        && Objects.equal(this.fanIn, that.fanIn)
 			        && Objects.equal(this.fanOut, that.fanOut)
-			        && Objects.equal(this.hash, that.hash)
 			        && Objects.equal(this.failedEvents,
 			                that.failedEvents);
 		}
@@ -145,7 +117,6 @@ public class State {
 		return Objects.toStringHelper(this).add("name", name).add("id", id)
 		        .add("url", url).add("candidateElements", candidateElements)
 		        .add("fanIn", fanIn).add("fanOut", fanOut)
-		        .add("hahs", hash)
 		        .add("failedEvents", failedEvents).toString();
 	}
 

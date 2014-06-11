@@ -15,7 +15,6 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.crawljax.core.ExitNotifier;
-import com.crawljax.core.state.duplicatedetection.NearDuplicateDetection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
@@ -55,7 +54,6 @@ public class InMemoryStateFlowGraph implements Serializable, StateFlowGraph {
 	private final ConcurrentMap<Integer, StateVertex> stateById;
 	private final ExitNotifier exitNotifier;
 	private final StateVertexFactory vertexFactory;
-	private final NearDuplicateDetection ndd;
 
 	/**
 	 * The constructor.
@@ -64,7 +62,7 @@ public class InMemoryStateFlowGraph implements Serializable, StateFlowGraph {
 	 *            used for triggering an exit.
 	 */
 	@Inject
-	public InMemoryStateFlowGraph(ExitNotifier exitNotifier, StateVertexFactory vertexFactory, NearDuplicateDetection ndd) {
+	public InMemoryStateFlowGraph(ExitNotifier exitNotifier, StateVertexFactory vertexFactory) {
 		this.exitNotifier = exitNotifier;
 		this.vertexFactory = vertexFactory;
 		sfg = new DirectedMultigraph<>(Eventable.class);
@@ -73,7 +71,6 @@ public class InMemoryStateFlowGraph implements Serializable, StateFlowGraph {
 		ReadWriteLock lock = new ReentrantReadWriteLock();
 		readLock = lock.readLock();
 		writeLock = lock.writeLock();
-		this.ndd = ndd;
 	}
 
 	/**
@@ -138,28 +135,12 @@ public class InMemoryStateFlowGraph implements Serializable, StateFlowGraph {
 
 	private boolean hasNearDuplicate(StateVertex vertex) {
 		for (StateVertex vertexOfGraph : sfg.vertexSet()) {
-			
-			if (vertex instanceof StateVertexNDD) {
-				StateVertexNDD vertexNDD = (StateVertexNDD) vertex;
-				StateVertexNDD vertexOfGraphNDD = (StateVertexNDD) vertexOfGraph;
-				updateMinDuplicateDistance(vertexNDD, vertexOfGraphNDD);
-			}
-			
 			if (vertex.equals(vertexOfGraph)) {
 				LOGGER.info("Duplicate found: {}, {}", vertex.getId(), vertexOfGraph.getId());
 				return true;
 			}
 		}
 		return false;
-	}
-	
-	private void updateMinDuplicateDistance(StateVertexNDD vertex, StateVertexNDD vertexFromSFG) {
-		double duplicateDistance = ndd.getDistance(vertex.getHashes(), vertexFromSFG.getHashes());
-		
-		if (duplicateDistance < vertex.getMinDuplicateDistance()) {
-			vertex.setMinDuplicateDistance(duplicateDistance);
-			LOGGER.error("UPDATE minDuplicateDistance to {} at ({},{})", duplicateDistance, vertex.getId(), vertexFromSFG.getId());
-		}
 	}
 
 	@Override
