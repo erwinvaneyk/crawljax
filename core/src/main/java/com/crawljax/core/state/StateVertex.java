@@ -68,5 +68,7 @@ public interface StateVertex extends Serializable {
 	 *         error it returns <code>null</code>.
 	 */
 	ImmutableList<CandidateElement> getCandidateElements();
+	
+	int[] getHashes();
 
 }
