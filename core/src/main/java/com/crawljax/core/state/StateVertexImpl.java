@@ -123,4 +123,11 @@ class StateVertexImpl implements StateVertex {
 		return candidateElements;
 	}
 
+	@Override
+    public int[] getHashes() {
+	    int[] hashes = new int[1];
+	    hashes[0] = this.hashCode();
+	    return hashes;
+    }
+
 }

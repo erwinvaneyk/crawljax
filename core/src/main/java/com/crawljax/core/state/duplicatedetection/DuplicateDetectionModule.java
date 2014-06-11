@@ -14,6 +14,6 @@ public class DuplicateDetectionModule extends AbstractModule {
 	    
 	    // Type of Near-duplicate detection algorithm
 	    // TODO make configurable through CrawljaxConfiguration?
-	    bind(NearDuplicateDetection.class).to(NearDuplicateDetectionCrawlHash32.class);
+	    bind(NearDuplicateDetection.class).to(NearDuplicateDetectionBroder32.class);
 	}
 }
