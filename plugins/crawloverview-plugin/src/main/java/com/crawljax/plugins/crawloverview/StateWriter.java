@@ -45,6 +45,7 @@ class StateWriter {
 		context.put("fanIn", state.getFanIn());
 		context.put("fanOut", state.getFanOut());
 		context.put("url", state.getUrl());
+		context.put("duplicateDistance", state.getDuplicateDistance());
 
 		String failedEvents = "-";
 		if (!state.getFailedEvents().isEmpty()) {
