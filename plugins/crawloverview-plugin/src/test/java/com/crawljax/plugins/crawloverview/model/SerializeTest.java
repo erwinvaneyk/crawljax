@@ -4,8 +4,10 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,17 +46,17 @@ public class SerializeTest {
 		int[] hashes = {1};
 		State state1 =
 		        new State("state1", "http://example.com/a", candidateElements, 1, 1, hashes, 1,
-		        		ImmutableList.of("failedEvent1"), 32.0);
+		        		ImmutableList.of("failedEvent1"), 32.0, new HashMap<Integer,Double>());
 		State state2 =
 		        new State("state2", "http://example.com/b", candidateElements, 1, 1, hashes, 1,
-		                ImmutableList.of("failedEvent2"), 32.0);
+		                ImmutableList.of("failedEvent2"), 32.0, new HashMap<Integer,Double>());
 		ImmutableMap<String, State> states =
 		        ImmutableMap.of(state1.getName(), state1, state2.getName(), state2);
 		ImmutableList<Edge> edges =
 		        ImmutableList.of(new Edge(state1.getName(), state2.getName(), 1, "the link",
 		                "id1", "A", "click"));
 		return new OutPutModel(states, edges, newStatistics(states.values()),
-		        ExitStatus.EXHAUSTED);
+		        ExitStatus.EXHAUSTED, new ArrayList<String>());
 	}
 
 	private Statistics newStatistics(Collection<State> states) {
