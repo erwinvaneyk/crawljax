@@ -122,11 +122,25 @@ footer small {
 					document.getElementById("thresholdValue").innerHTML = "Threshold: " + threshold;
 					
 					// Remove the states that are considered as near-duplicates of already existing states for the given threshold
-					$.each(states, function() {
-						if (this.minDuplicateDistance <= threshold) {
-							graph.removeNode(this.name);
-						}
-					});
+					/* The algorithm
+					var $statesInGraph = empty array
+					for each $state in $sortedStates
+						boolean inGraph = true;
+						$currentState = object state from the json {$states.get($state)}
+						for each ($item in $currenState.duplicateDistance.entrySet())
+							if ($statesInGraph contains $item.getKey() && $item.getValue() < threshold)
+								graph.removeNode($currentState);
+								inGraph = false;
+							#end
+						#end
+						if (inGraph) 
+							add $currentState to $statesInGraph
+						#end
+					#end
+					
+					Problem: It is possible that the graph can become disconnected
+					Solution: Remove separate sub-graphs
+					*/
 					
 					loadPage(pageRef);
 				}
