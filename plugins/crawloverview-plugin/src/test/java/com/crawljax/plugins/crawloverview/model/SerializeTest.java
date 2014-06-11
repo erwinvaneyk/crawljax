@@ -46,10 +46,10 @@ public class SerializeTest {
 		int[] hashes = {1};
 		State state1 =
 		        new State("state1", "http://example.com/a", candidateElements, 1, 1, hashes, 1,
-		        		ImmutableList.of("failedEvent1"), 32.0, new HashMap<Integer,Double>());
+		        		ImmutableList.of("failedEvent1"), 32.0, new HashMap<String,Double>());
 		State state2 =
 		        new State("state2", "http://example.com/b", candidateElements, 1, 1, hashes, 1,
-		                ImmutableList.of("failedEvent2"), 32.0, new HashMap<Integer,Double>());
+		                ImmutableList.of("failedEvent2"), 32.0, new HashMap<String,Double>());
 		ImmutableMap<String, State> states =
 		        ImmutableMap.of(state1.getName(), state1, state2.getName(), state2);
 		ImmutableList<Edge> edges =

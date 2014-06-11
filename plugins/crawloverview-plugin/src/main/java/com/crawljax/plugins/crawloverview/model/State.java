@@ -28,11 +28,11 @@ public class State {
 	// minDuplicateDistance is the distance to the state that has most in common with this state
 	// or is most likely a duplicate of this state.
 	private final double minDuplicateDistance;
-	private final HashMap<Integer,Double> duplicateDistance;
+	private final HashMap<String,Double> duplicateDistance;
 	
 	public State(StateVertex state, int fanIn, int fanOut,
 	        ImmutableList<CandidateElementPosition> candidates,
-	        ImmutableList<String> failedEvents, HashMap<Integer,Double> differenceDistance) {
+	        ImmutableList<String> failedEvents, HashMap<String,Double> differenceDistance) {
 		this.fanIn = fanIn;
 		this.fanOut = fanOut;
 		candidateElements = candidates;
@@ -63,7 +63,7 @@ public class State {
 	        @JsonProperty("hash") int[] hash, @JsonProperty("id") int id,
 	        @JsonProperty("failedEvents") ImmutableList<String> failedEvents,
 	        @JsonProperty("minDuplicateDistance") double minDuplicateDistance,
-	        @JsonProperty("differenceDistance") HashMap<Integer,Double> duplicateDistance) {
+	        @JsonProperty("differenceDistance") HashMap<String,Double> duplicateDistance) {
 		super();
 		this.name = name;
 		this.url = url;
@@ -119,7 +119,7 @@ public class State {
 		        id, failedEvents);
 	}
 
-	public HashMap<Integer,Double> getDuplicateDistance() {
+	public HashMap<String,Double> getDuplicateDistance() {
 		return duplicateDistance;
 	}
 	@Override
