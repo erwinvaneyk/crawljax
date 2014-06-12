@@ -21,7 +21,7 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	private static final Logger LOG = (Logger) LoggerFactory.getLogger(NearDuplicateDetectionBroder32.class);
 
 	private List<FeatureType> features;
-	private double threshold;
+	private double defaultThreshold;
 	private HashGenerator hashGenerator;
 	private final static float THRESHOLD_UPPERLIMIT = 1;
 	private final static float THRESHOLD_LOWERLIMIT = 0;
@@ -32,7 +32,7 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 		checkPreconditionsThreshold(threshold);
 		this.hashGenerator = hg;
 		this.features = fs;
-		this.threshold = threshold;
+		this.defaultThreshold = threshold;
 		LOG.info("NearDuplicateDetectionBroder32[threshold=" + threshold + ", feature-list = " + fs + ", HashGenerator= " + hg +"]");
 	}
 	
@@ -47,7 +47,7 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	public Fingerprint generateHash(String doc) {
 		// Check preconditions
 		checkPreconditionsFeatures(features);
-		checkPreconditionsThreshold(threshold);
+		checkPreconditionsThreshold(defaultThreshold);
 
 		List<String> shingles = this.generateFeatures(doc);
 		int length = shingles.size();
@@ -56,7 +56,7 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 		for (int i = 0; i < length; i++) {
 			hashes[i] = hashGenerator.generateHash(shingles.get(i));
 		}
-		return new BroderFingerprint(hashes, threshold);
+		return new BroderFingerprint(hashes, defaultThreshold);
 	}	
 
 	/**
@@ -106,13 +106,13 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	}
 
 	public double getThreshold() {
-		return threshold;
+		return defaultThreshold;
 	}
 
 	public void setThreshold(double threshold) {
 		checkPreconditionsThreshold(threshold);
-		LOG.info("Threshold changed from {} to {}", this.threshold, threshold);
-		this.threshold = threshold;
+		LOG.info("Threshold changed from {} to {}", this.defaultThreshold, threshold);
+		this.defaultThreshold = threshold;
 	}
 
 	public List<FeatureType> getFeatures() {
