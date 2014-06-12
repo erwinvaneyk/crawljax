@@ -152,6 +152,6 @@ public class FeatureShingles implements FeatureType {
 	}
 
 	public String toString() {
-		return "FeatureShingles[" + this.count + ", " + this.type + "]";		
+		return "FeatureShingles[" + this.size + ", " + this.type + "]";		
 	}
 }

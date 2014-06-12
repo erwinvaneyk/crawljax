@@ -9,6 +9,7 @@ import com.crawljax.util.DomUtils;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
+import com.google.inject.Inject;
 
 import org.w3c.dom.Document;
 
