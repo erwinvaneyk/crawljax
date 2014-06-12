@@ -1,15 +1,12 @@
 package com.crawljax.core.state.duplicatedetection;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 
-import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -47,7 +44,7 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 	 * @return an array of the hashes, generated from the features, of the given string
 	 */
 	@Override
-	public int[] generateHash(String doc) {
+	public Fingerprint generateHash(String doc) {
 		// Check preconditions
 		checkPreconditionsFeatures(features);
 		checkPreconditionsThreshold(threshold);
@@ -59,45 +56,8 @@ public class NearDuplicateDetectionBroder32 implements NearDuplicateDetection {
 		for (int i = 0; i < length; i++) {
 			hashes[i] = hashGenerator.generateHash(shingles.get(i));
 		}
-		return hashes;
-	}
-
-	/**
-	 * Return true if the JaccardCoefficient is higher than the threshold.
-	 */
-	@Override
-	public boolean isNearDuplicateHash(int[] state1, int[] state2) {
-		return (this.getDistance(state1, state2) <= this.threshold);
-	}
-
-	/**
-	 * Get the distance between two sets.
-	 * 
-	 * @return Zero if both sets contains exactly the same hashes and one if the two sets contains
-	 *         all different hashes and values in between for the corresponding difference. The
-	 *         closer the value is to zero, the more hashes in the sets are the same.
-	 */
-	@Override
-	public double getDistance(int[] state1, int[] state2) {
-		double jaccardCoefficient = this.getJaccardCoefficient(state1, state2);
-		return 1 - jaccardCoefficient;
-	}
-
-	private double getJaccardCoefficient(int[] state1, int[] state2) {
-		Set<Integer> setOfFirstArg = new HashSet<Integer>(state1.length);
-		Set<Integer> setOfSecondArg = new HashSet<Integer>(state2.length);
-		for (int state : state1) {
-			setOfFirstArg.add(state);
-		}
-		for (int state : state2) {
-			setOfSecondArg.add(state);
-		}
-
-		double unionCount = Sets.union(setOfFirstArg, setOfSecondArg).size();
-		double intersectionCount = Sets.intersection(setOfFirstArg, setOfSecondArg).size();
-
-		return (intersectionCount / unionCount);
-	}
+		return new BroderFingerprint(hashes, threshold);
+	}	
 
 	/**
 	 * Generate the features from the content of the state.

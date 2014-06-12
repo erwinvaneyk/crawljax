@@ -42,7 +42,7 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 	}
 
 	@Override
-	public int[] generateHash(String doc) {
+	public Fingerprint generateHash(String doc) {
 		checkPreconditionsFeatures(features);
 		checkPreconditionsThreshold(threshold);
 		int[] bits = new int[HASH_LENGTH];
@@ -53,8 +53,7 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 			int v = hashGenerator.generateHash(t);
 			bits = addHashToArray(v, bits);
 		}
-		int[] hashArray = { projectArrayOnHash(bits) };
-		return hashArray;
+		return new CrawlhashFingerprint(projectArrayOnHash(bits), threshold);
 	}
 
 	private List<String> generateFeatures(String doc) {
@@ -90,22 +89,6 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 		}
 		return bits;
 	}
-
-	public int hammingDistance(int hash1, int hash2) {
-		int i = hash1 ^ hash2;
-		i = i - ((i >>> 1) & 0x55555555);
-		i = (i & 0x33333333) + ((i >>> 2) & 0x33333333);
-		i = (i + (i >>> 4)) & 0x0f0f0f0f;
-		i = i + (i >>> 8);
-		i = i + (i >>> 16);
-		return i & 0x3f;
-	}
-
-	@Override
-	public boolean isNearDuplicateHash(int[] hash1, int[] hash2) {
-		return ((double) hammingDistance(hash1[0], hash2[0])) <= threshold;
-	}
-
 	/**
 	 * Checks the precondition for the feature-list, which should not be empty or null.
 	 * 
@@ -137,11 +120,7 @@ public class NearDuplicateDetectionCrawlHash32 implements NearDuplicateDetection
 	public double getThreshold() {
 		return threshold;
 	}
-
-	public double getDistance(int[] hash1, int[] hash2) {
-		return hammingDistance(hash1[0], hash2[0]);
-	}
-
+	
 	public List<FeatureType> getFeatures() {
 		return features;
 	}
