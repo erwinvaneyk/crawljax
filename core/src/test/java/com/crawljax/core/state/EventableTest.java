@@ -27,8 +27,6 @@ import org.xml.sax.SAXException;
 import com.crawljax.core.CrawljaxException;
 import com.crawljax.core.ExitNotifier;
 import com.crawljax.core.state.Eventable.EventType;
-import com.crawljax.core.state.duplicatedetection.NearDuplicateDetectionBroder32;
-import com.crawljax.core.state.duplicatedetection.XxHashGenerator;
 import com.crawljax.util.DomUtils;
 
 public class EventableTest {
@@ -132,7 +130,7 @@ public class EventableTest {
 
 		StateVertex s1 = new StateVertexImpl(0, "stateSource", "dom1");
 		StateVertex s2 = new StateVertexImpl(0, "stateTarget", "dom2");
-		InMemoryStateFlowGraph sfg = new InMemoryStateFlowGraph(new ExitNotifier(0), new DefaultStateVertexFactory(), new NearDuplicateDetectionBroder32(new XxHashGenerator()));
+		InMemoryStateFlowGraph sfg = new InMemoryStateFlowGraph(new ExitNotifier(0), new DefaultStateVertexFactory());
 		sfg.putIndex(s1);
 
 		sfg.putIfAbsent(s2);

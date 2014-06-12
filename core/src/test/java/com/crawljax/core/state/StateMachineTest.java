@@ -240,7 +240,7 @@ public class StateMachineTest {
 	}
 
 	private InMemoryStateFlowGraph newStateFlowGraph() {
-		InMemoryStateFlowGraph sfg = new InMemoryStateFlowGraph(new ExitNotifier(0), new DefaultStateVertexFactory(), new NearDuplicateDetectionBroder32(new XxHashGenerator()));
+		InMemoryStateFlowGraph sfg = new InMemoryStateFlowGraph(new ExitNotifier(0), new DefaultStateVertexFactory());
 		sfg.putIndex(index);
 		return sfg;
 	}
