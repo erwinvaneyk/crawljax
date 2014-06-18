@@ -75,9 +75,9 @@ class OutPutModelCache {
 			        "Printing state difference. \nSession states: {} \nResult states: {}",
 			        statesCopy, session.getStateFlowGraph().getAllStates());
 		}
-
 		StateStatistics stateStats = new StateStatistics(statesCopy.values());
-		DuplicateDetectionStatistics duplicateDetectionStats = new DuplicateDetectionStatistics();
+		
+		DuplicateDetectionStatistics duplicateDetectionStats = new DuplicateDetectionStatistics(session);
 		return new OutPutModel(statesCopy, edgesCopy, new Statistics(session,
 		        stateStats, startDate, failedEvents.get(), duplicateDetectionStats), exitStatus);
 	}
