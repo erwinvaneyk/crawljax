@@ -3,6 +3,7 @@ package com.crawljax.plugins.crawloverview;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 import com.crawljax.core.plugin.*;
@@ -86,7 +87,7 @@ public class CrawlOverview implements OnNewStatePlugin, PreStateCrawlingPlugin,
 	@Override
 	public void onNewState(CrawlerContext context, StateVertex vertex) {
 		LOG.debug("onNewState");
-		HashMap<String,Double> differenceDistance = updateSimilarityDistance(vertex, context.getSession().getStateFlowGraph());
+		Map<String,Double> differenceDistance = updateSimilarityDistance(vertex, context.getSession().getStateFlowGraph());
 		StateBuilder state = outModelCache.addStateIfAbsent(vertex, differenceDistance);
 		visitedStates.putIfAbsent(state.getName(), vertex);
 		saveScreenshot(context.getBrowser(), state.getName(), vertex);
