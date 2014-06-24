@@ -108,7 +108,7 @@ public class NearDuplicateDetectionCrawlhashTest {
 		new NearDuplicateDetectionCrawlhash(32, features, hasher);
 	}
 
-	@Test(expected = DuplicateDetectionException.class)
+	@Test
 	public void testThresholdOffBoundary() {
 		HashGenerator hasher = new XxHashGenerator();
 		ArrayList<FeatureType> features = new ArrayList<FeatureType>();
@@ -116,7 +116,7 @@ public class NearDuplicateDetectionCrawlhashTest {
 		new NearDuplicateDetectionCrawlhash(33, features, hasher);
 	}
 
-	@Test(expected = DuplicateDetectionException.class)
+	@Test
 	public void testToLowThreshold() {
 		HashGenerator hasher = new XxHashGenerator();
 		ArrayList<FeatureType> features = new ArrayList<FeatureType>();

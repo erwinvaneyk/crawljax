@@ -1,5 +1,6 @@
 package com.crawljax.core.state.duplicatedetection;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,11 +13,11 @@ import com.google.common.collect.Sets;
  */
 public class BroderFingerprint implements Fingerprint {
 
-	private double defaultThreshold;
-	private int[] hashes;
+	private final double defaultThreshold;
+	private final int[] hashes;
 
-	private final static double THRESHOLD_UPPERLIMIT = 1;
-	private final static double THRESHOLD_LOWERLIMIT = 0;
+	private static final double THRESHOLD_UPPERLIMIT = 1;
+	private static final double THRESHOLD_LOWERLIMIT = 0;
 
 	/**
 	 * Constructor for this used by the NearDuplicateDetectionBroder
@@ -26,7 +27,7 @@ public class BroderFingerprint implements Fingerprint {
 	 * @param defaultThreshold
 	 *            the default threshold, which is used when no threshold is provided.
 	 */
-	public BroderFingerprint(int[] hashes, double defaultThreshold) {
+	BroderFingerprint(int[] hashes, double defaultThreshold) {
 		checkIfValidThreshold(defaultThreshold);
 		this.defaultThreshold = defaultThreshold;
 		this.hashes = hashes;
@@ -35,36 +36,38 @@ public class BroderFingerprint implements Fingerprint {
 	/**
 	 * Constructor without setting the defaultThreshold, which will be set to 1.
 	 * 
-	 * @param hash
-	 *            the generated hash on which this fingerprint is based.
+	 * @param hashes
+	 *            the generated hashes on which this fingerprint is based.
 	 */
-	public BroderFingerprint(int[] hashes) {
+	BroderFingerprint(int[] hashes) {
 		this.hashes = hashes;
 		this.defaultThreshold = 1;
 	}
 
 	@Override
 	public boolean isNearDuplicate(Fingerprint other) {
-		return (this.getDistance(other) <= this.defaultThreshold);
+		return getDistance(other) <= defaultThreshold;
 	}
 
 	@Override
 	public boolean isNearDuplicate(Fingerprint other, double threshold) {
 		checkIfValidThreshold(threshold);
-		return (this.getDistance(other) <= threshold);
+		return getDistance(other) <= threshold;
 	}
 
 	/**
 	 * Get the distance between two sets.
 	 * 
+	 * @param other
+	 *            The other BroderFingerprint, to which the distance should be calculated.
 	 * @return Zero if both sets contains exactly the same hashes and one if the two sets contains
 	 *         all different hashes and values in between for the corresponding difference. The
 	 *         closer the value is to zero, the more hashes in the sets are the same.
 	 */
 	@Override
 	public double getDistance(Fingerprint other) {
-		BroderFingerprint that = assertFingerprintType(other);
-		return 1 - this.getJaccardCoefficient(this.hashes, that.hashes);
+		BroderFingerprint that = fingerprintTypeCheck(other);
+		return 1 - this.getJaccardCoefficient(hashes, that.hashes);
 	}
 
 	/**
@@ -73,8 +76,9 @@ public class BroderFingerprint implements Fingerprint {
 	 * 
 	 * @param other
 	 *            the Fingerprint of which the type should be the same as this.
+	 * @return Broderfingerprint if other is a Broderfingerprint, else a Runtime-exception is thrown.
 	 */
-	private BroderFingerprint assertFingerprintType(Fingerprint other) {
+	private BroderFingerprint fingerprintTypeCheck(Fingerprint other) {
 		if (!this.getClass().isInstance(other))
 			throw new DuplicateDetectionException(
 			        "Cannot compare fingerprints of different types. (this: " + this.getClass()
@@ -104,26 +108,36 @@ public class BroderFingerprint implements Fingerprint {
 		// Do the Jaccard index calculation: union(A,B)/intersect(A,B)
 		double unionCount = Sets.union(setOfFirstArg, setOfSecondArg).size();
 		double intersectionCount = Sets.intersection(setOfFirstArg, setOfSecondArg).size();
-		return (intersectionCount / unionCount);
+		return intersectionCount / unionCount;
 	}
 
-
-	/**
-	 * A fingerprint equals another fingerprint, when the hashes are completely the same. Another
-	 * implicit way of invoking an equals is to invoke isNearDuplicateHash(other,0).
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!getClass().isInstance(obj))
 			return false;
 		BroderFingerprint other = (BroderFingerprint) obj;
-		return this.isNearDuplicate(other, 0);
+		if (!Arrays.equals(hashes, other.hashes))
+			return false;
+		return true;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		return prime + Arrays.hashCode(hashes);
+	}
+
+	/**
+	 * Checks if threshold is a double within the upper and lower bounds of the fingerprint-type. If
+	 * not a runtime-exception is thrown.
+	 * 
+	 * @param threshold
+	 *            The threshold-value that should be checked.
+	 */
 	private void checkIfValidThreshold(double threshold) {
 		if (threshold > THRESHOLD_UPPERLIMIT || threshold < THRESHOLD_LOWERLIMIT) {
 			throw new DuplicateDetectionException("Invalid threshold value " + threshold
@@ -145,5 +159,11 @@ public class BroderFingerprint implements Fingerprint {
 	@Override
 	public double getDefaultThreshold() {
 		return defaultThreshold;
+	}
+
+	@Override
+	public String toString() {
+		return "BroderFingerprint [defaultThreshold=" + defaultThreshold + ", hashes="
+		        + Arrays.toString(hashes) + "]";
 	}
 }

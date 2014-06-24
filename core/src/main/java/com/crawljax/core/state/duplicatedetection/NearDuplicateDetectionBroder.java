@@ -2,13 +2,10 @@ package com.crawljax.core.state.duplicatedetection;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.LoggerFactory;
-
-import ch.qos.logback.classic.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import ch.qos.logback.classic.Logger;
 
 /**
  * Near-duplicate detection based on the use of a Jaccard coefficient. Given a set of features,
@@ -25,20 +22,40 @@ public class NearDuplicateDetectionBroder implements NearDuplicateDetection {
 	private double defaultThreshold;
 	private HashGenerator hashGenerator;
 
+	/**
+	 * Default NearDuplicateDetectionBroder-constructor, the hashGenerator remains undefined until
+	 * it is set using the setter.
+	 * 
+	 * @param threshold
+	 *            the default threshold that should be provided to the fingerprints when generated.
+	 * @param fs
+	 *            the features that should be used to generate the fingerprints
+	 */
 	public NearDuplicateDetectionBroder(double threshold, List<FeatureType> fs) {
 		checkPreconditionsFeatures(fs);
 		this.features = fs;
 		this.defaultThreshold = threshold;
-		LOG.info("NearDuplicateDetectionBroder[threshold=" + threshold + ", feature-list = " + fs + "]");
+		LOG.info("NearDuplicateDetectionBroder[threshold=" + threshold + ", feature-list = " + fs
+		        + "]");
 	}
 
+	/**
+	 * The NearDuplicateDetectionBroder-constructor which also sets the HashGenerator.
+	 * 
+	 * @param threshold
+	 *            the default threshold that should be provided to the fingerprints when generated.
+	 * @param fs
+	 *            the features that should be used to generate the fingerprints.
+	 * @param hg
+	 *            the hashGenerator used to generate the hashes inside the fingerprints.
+	 */
 	public NearDuplicateDetectionBroder(double threshold, List<FeatureType> fs,
-            HashGenerator hg) {
+	        HashGenerator hg) {
 		checkPreconditionsFeatures(fs);
 		this.features = fs;
 		this.defaultThreshold = threshold;
 		this.hashGenerator = hg;
-    }
+	}
 
 	/**
 	 * Generate the hashes from the features of the string.
@@ -98,15 +115,19 @@ public class NearDuplicateDetectionBroder implements NearDuplicateDetection {
 		return defaultThreshold;
 	}
 
-	public void setDefaultThreshold(double threshold) {
-		LOG.info("Default threshold changed from {} to {}", this.defaultThreshold, threshold);
-		this.defaultThreshold = threshold;
+	@Override
+	public void setDefaultThreshold(double defaultThreshold) {
+		LOG.info("Default threshold changed from {} to {}", this.defaultThreshold,
+		        defaultThreshold);
+		this.defaultThreshold = defaultThreshold;
 	}
 
+	@Override
 	public List<FeatureType> getFeatures() {
 		return features;
 	}
 
+	@Override
 	public void setFeatures(List<FeatureType> features) {
 		checkPreconditionsFeatures(features);
 		LOG.info("Feature-set changed from {} to {}", this.features, features);
@@ -115,7 +136,13 @@ public class NearDuplicateDetectionBroder implements NearDuplicateDetection {
 
 	@Inject
 	@Override
-    public void setHashGenerator(HashGenerator hashGenerator) {
-		this.hashGenerator = hashGenerator;	    
-    }
+	public void setHashGenerator(HashGenerator hashGenerator) {
+		this.hashGenerator = hashGenerator;
+	}
+
+	@Override
+	public String toString() {
+		return "NearDuplicateDetectionBroder [features=" + features + ", defaultThreshold="
+		        + defaultThreshold + ", hashGenerator=" + hashGenerator + "]";
+	}
 }

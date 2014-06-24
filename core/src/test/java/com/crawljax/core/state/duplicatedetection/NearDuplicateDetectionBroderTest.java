@@ -23,14 +23,14 @@ public class NearDuplicateDetectionBroderTest {
 		new NearDuplicateDetectionBroder(2.0 / 6.0, null, hasher);
 	}
 
-	@Test(expected = DuplicateDetectionException.class)
+	@Test
 	public void testToHighThreshold() {
 		HashGenerator hasher = new XxHashGenerator();
 		features.add(new FeatureShingles(2, FeatureShingles.SizeType.WORDS));
 		new NearDuplicateDetectionBroder(5, features, hasher);
 	}
 
-	@Test(expected = DuplicateDetectionException.class)
+	@Test
 	public void testToLowThreshold() {
 		HashGenerator hasher = new XxHashGenerator();
 		features.add(new FeatureShingles(2, FeatureShingles.SizeType.WORDS));
