@@ -144,9 +144,9 @@ public class FeatureShingles implements FeatureType {
 			feature = new StringBuilder(originalStrings[j].length() * size);
 			// Append this.size strings to each other to form a shingle
 			for (int i = 0; i < size; i++) {
-				feature += originalStrings[j + i];
+				feature.append(originalStrings[j + i]);
 			}
-			resultFeatures[j] = feature;
+			resultFeatures[j] = feature.toString();
 		}
 		return resultFeatures;
 	}

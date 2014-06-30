@@ -75,7 +75,7 @@ public class CrawlhashFingerprint implements Fingerprint {
 	}
 
 	/**
-	 * The Hamming-distance (http://en.wikipedia.org/wiki/Hamming_distance) calculates the distance
+	 * The <a href="http://en.wikipedia.org/wiki/Hamming_distance">Hamming-distance</a> calculates the distance
 	 * between two hashes.
 	 * 
 	 * @param hash1
