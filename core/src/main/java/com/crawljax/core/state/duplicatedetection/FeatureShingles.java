@@ -6,8 +6,8 @@ import java.util.List;
 
 /**
  * FeatureShingles represents the features based on collecting shingles from a document. An example
- * of a 2-shingle-collection of the string "abcd" => {"ab","bc","cd"}. More information:
- * http://en.wikipedia.org/wiki/W-shingling
+ * of a 2-shingle-collection of the string <code>"abcd" => {"ab","bc","cd"}</code>.
+ * <a href="http://en.wikipedia.org/wiki/W-shingling">More information.</a>
  */
 public class FeatureShingles implements FeatureType {
 
@@ -139,8 +139,9 @@ public class FeatureShingles implements FeatureType {
 	 */
 	private String[] generateFeatures(String[] originalStrings) {
 		String[] resultFeatures = new String[originalStrings.length - size + 1];
+		StringBuilder feature = null;
 		for (int j = 0; j < resultFeatures.length; j++) {
-			String feature = "";
+			feature = new StringBuilder(originalStrings[j].length() * size);
 			// Append this.size strings to each other to form a shingle
 			for (int i = 0; i < size; i++) {
 				feature += originalStrings[j + i];

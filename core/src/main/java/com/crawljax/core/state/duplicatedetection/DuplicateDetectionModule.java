@@ -3,6 +3,7 @@ package com.crawljax.core.state.duplicatedetection;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
@@ -31,7 +32,7 @@ public class DuplicateDetectionModule extends AbstractModule {
 			List<FeatureType> features = new ArrayList<FeatureType>(1);
 			features.add(new FeatureShingles(3, FeatureShingles.SizeType.WORDS));
 			nearDuplicateDetectionFactory =
-			        new NearDuplicateDetectionCrawlhash(threshold, features);
+			        new NearDuplicateDetectionCrawlhash(threshold, ImmutableList.copyOf(features));
 		}
 		nearDuplicateDetectionFactory.setHashGenerator(hasher);
 		return nearDuplicateDetectionFactory;

@@ -87,7 +87,7 @@ public class BroderFingerprint implements Fingerprint {
 	}
 
 	/**
-	 * Calculate the Jaccard Coefficient (http://en.wikipedia.org/wiki/Jaccard_index) of two sets of
+	 * Calculate the <a href="http://en.wikipedia.org/wiki/Jaccard_index">Jaccard Coefficient</a> of two sets of
 	 * integers.
 	 * 
 	 * @param state1
@@ -97,6 +97,7 @@ public class BroderFingerprint implements Fingerprint {
 	 * @return the Jaccard Coefficient of the two arguments.
 	 */
 	private double getJaccardCoefficient(int[] state1, int[] state2) {
+		// Remove any duplicates hashes from the ints by using sets
 		Set<Integer> setOfFirstArg = new HashSet<Integer>(state1.length);
 		Set<Integer> setOfSecondArg = new HashSet<Integer>(state2.length);
 		for (int state : state1) {
@@ -105,7 +106,7 @@ public class BroderFingerprint implements Fingerprint {
 		for (int state : state2) {
 			setOfSecondArg.add(state);
 		}
-		// Do the Jaccard index calculation: union(A,B)/intersect(A,B)
+		// Do the Jaccard index calculation: intersect(A,B)/union(A,B)
 		double unionCount = Sets.union(setOfFirstArg, setOfSecondArg).size();
 		double intersectionCount = Sets.intersection(setOfFirstArg, setOfSecondArg).size();
 		return intersectionCount / unionCount;

@@ -2,15 +2,19 @@ package com.crawljax.core.state.duplicatedetection;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableCollection;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
 import ch.qos.logback.classic.Logger;
 
 /**
  * Near-duplicate detection based on the use of a Jaccard coefficient. Given a set of features,
  * these features are first hashed. Afterwards the collections of hashes of SiteA and SiteB compared
- * using the Jaccard coefficients (intersection(SiteA,SiteB)/union(SiteA,SiteB)).
+ * using the Jaccard coefficients <code>(intersection(SiteA,SiteB)/union(SiteA,SiteB))</code>.
  */
 @Singleton
 public class NearDuplicateDetectionBroder implements NearDuplicateDetection {
@@ -18,7 +22,7 @@ public class NearDuplicateDetectionBroder implements NearDuplicateDetection {
 	private static final Logger LOG = (Logger) LoggerFactory
 	        .getLogger(NearDuplicateDetectionBroder.class);
 
-	private List<FeatureType> features;
+	private ImmutableCollection<FeatureType> features;
 	private double defaultThreshold;
 	private HashGenerator hashGenerator;
 
@@ -31,7 +35,7 @@ public class NearDuplicateDetectionBroder implements NearDuplicateDetection {
 	 * @param fs
 	 *            the features that should be used to generate the fingerprints
 	 */
-	public NearDuplicateDetectionBroder(double threshold, List<FeatureType> fs) {
+	public NearDuplicateDetectionBroder(double threshold, ImmutableCollection<FeatureType> fs) {
 		checkPreconditionsFeatures(fs);
 		this.features = fs;
 		this.defaultThreshold = threshold;
@@ -49,7 +53,7 @@ public class NearDuplicateDetectionBroder implements NearDuplicateDetection {
 	 * @param hg
 	 *            the hashGenerator used to generate the hashes inside the fingerprints.
 	 */
-	public NearDuplicateDetectionBroder(double threshold, List<FeatureType> fs,
+	public NearDuplicateDetectionBroder(double threshold, ImmutableCollection<FeatureType> fs,
 	        HashGenerator hg) {
 		checkPreconditionsFeatures(fs);
 		this.features = fs;
@@ -103,7 +107,7 @@ public class NearDuplicateDetectionBroder implements NearDuplicateDetection {
 	 * @param features
 	 *            feature-list to be checked
 	 */
-	private void checkPreconditionsFeatures(List<FeatureType> features) {
+	private void checkPreconditionsFeatures(ImmutableCollection<FeatureType> features) {
 		if (features == null || features.isEmpty()) {
 			throw new DuplicateDetectionException(
 			        "Invalid feature-list provided, feature-list cannot be null or empty. (Provided: "
@@ -123,12 +127,12 @@ public class NearDuplicateDetectionBroder implements NearDuplicateDetection {
 	}
 
 	@Override
-	public List<FeatureType> getFeatures() {
+	public ImmutableCollection<FeatureType> getFeatures() {
 		return features;
 	}
 
 	@Override
-	public void setFeatures(List<FeatureType> features) {
+	public void setFeatures(ImmutableCollection<FeatureType> features) {
 		checkPreconditionsFeatures(features);
 		LOG.info("Feature-set changed from {} to {}", this.features, features);
 		this.features = features;

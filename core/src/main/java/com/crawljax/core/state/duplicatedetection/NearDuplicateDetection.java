@@ -1,6 +1,6 @@
 package com.crawljax.core.state.duplicatedetection;
 
-import java.util.List;
+import com.google.common.collect.ImmutableCollection;
 
 /**
  * NearDuplicateDetection is the main class of the duplicate-detection-package. Depending on
@@ -29,7 +29,7 @@ public interface NearDuplicateDetection {
 	 * 
 	 * @return list of features
 	 */
-	List<FeatureType> getFeatures();
+	ImmutableCollection<FeatureType> getFeatures();
 
 	/**
 	 * Set new features to be used in fingerprint generation
@@ -37,7 +37,7 @@ public interface NearDuplicateDetection {
 	 * @param features
 	 *            a list of features with at least 1 feature
 	 */
-	void setFeatures(List<FeatureType> features);
+	void setFeatures(ImmutableCollection<FeatureType> features);
 
 	/**
 	 * Set new default threshold. Has to be within constraint of the implementation.

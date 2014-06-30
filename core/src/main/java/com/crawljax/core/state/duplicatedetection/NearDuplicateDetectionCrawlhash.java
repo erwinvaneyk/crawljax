@@ -2,9 +2,13 @@ package com.crawljax.core.state.duplicatedetection;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableCollection;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
 import ch.qos.logback.classic.Logger;
 
 /**
@@ -19,7 +23,7 @@ public class NearDuplicateDetectionCrawlhash implements NearDuplicateDetection {
 	private static final int HEX_ONE = 0x00000001;
 	private static final int HEX_ZERO = 0x00000000;
 
-	private List<FeatureType> features;
+	private ImmutableCollection<FeatureType> features;
 	private double defaultThreshold;
 	private HashGenerator hashGenerator;
 	private static final Logger LOG = (Logger) LoggerFactory
@@ -33,7 +37,7 @@ public class NearDuplicateDetectionCrawlhash implements NearDuplicateDetection {
 	 * @param fs
 	 *            the features that should be used to generate the fingerprints
 	 */
-	public NearDuplicateDetectionCrawlhash(double threshold, List<FeatureType> fs) {
+	public NearDuplicateDetectionCrawlhash(double threshold, ImmutableCollection<FeatureType> fs) {
 		checkPreconditionsFeatures(fs);
 		this.features = fs;
 		this.defaultThreshold = threshold;
@@ -49,7 +53,7 @@ public class NearDuplicateDetectionCrawlhash implements NearDuplicateDetection {
 	 * @param hg
 	 *            the hashGenerator used to generate the hashes inside the fingerprints.
 	 */
-	public NearDuplicateDetectionCrawlhash(double threshold, List<FeatureType> fs,
+	public NearDuplicateDetectionCrawlhash(double threshold, ImmutableCollection<FeatureType> fs,
 	        HashGenerator hg) {
 		checkPreconditionsFeatures(fs);
 		this.features = fs;
@@ -137,7 +141,7 @@ public class NearDuplicateDetectionCrawlhash implements NearDuplicateDetection {
 	 * @param features
 	 *            feature-list to be checked
 	 */
-	private void checkPreconditionsFeatures(List<FeatureType> features) {
+	private void checkPreconditionsFeatures(ImmutableCollection<FeatureType> features) {
 		if (features == null || features.isEmpty()) {
 			throw new DuplicateDetectionException(
 			        "Invalid feature-list provided, feature-list cannot be "
@@ -151,7 +155,7 @@ public class NearDuplicateDetectionCrawlhash implements NearDuplicateDetection {
 	}
 
 	@Override
-	public List<FeatureType> getFeatures() {
+	public ImmutableCollection<FeatureType> getFeatures() {
 		return features;
 	}
 
@@ -163,7 +167,7 @@ public class NearDuplicateDetectionCrawlhash implements NearDuplicateDetection {
 	}
 
 	@Override
-	public void setFeatures(List<FeatureType> features) {
+	public void setFeatures(ImmutableCollection<FeatureType> features) {
 		checkPreconditionsFeatures(features);
 		LOG.info("Feature-set changed from {} to {}", this.features, features);
 		this.features = features;
