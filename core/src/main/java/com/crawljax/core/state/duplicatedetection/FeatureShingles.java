@@ -20,6 +20,16 @@ public class FeatureShingles implements FeatureType {
 
 	private final SizeType type;
 	private final int size;
+	
+	/**
+	 * 
+	 * @param size
+	 * @param type
+	 * @return
+	 */
+	public static FeatureShingles withSize(int size, SizeType type) {
+		return new FeatureShingles(size, type);
+	}
 
 	/**
 	 * @param size

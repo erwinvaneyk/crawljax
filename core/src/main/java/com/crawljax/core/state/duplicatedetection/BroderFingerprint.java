@@ -126,12 +126,6 @@ public class BroderFingerprint implements Fingerprint {
 		return true;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		return prime + Arrays.hashCode(hashes);
-	}
-
 	/**
 	 * Checks if threshold is a double within the upper and lower bounds of the fingerprint-type. If
 	 * not a runtime-exception is thrown.

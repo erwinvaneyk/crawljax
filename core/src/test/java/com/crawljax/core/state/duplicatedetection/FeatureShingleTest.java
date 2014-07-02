@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-
 import com.google.common.collect.ImmutableList;
 
 public class FeatureShingleTest {
@@ -80,7 +79,8 @@ public class FeatureShingleTest {
 		boolean third = features.remove("No more inspiration right now.");
 		assertTrue("'No more inspiration right now.' does not exist in the list of features",
 		        third);
-
+		
+		assertNotNull(shingleSentences.toString());
 		assertEquals(features.size(), 0);
 	}
 
@@ -169,7 +169,7 @@ public class FeatureShingleTest {
 	@Test(expected = FeatureException.class)
 	public void testFeatureSizeSentencesOffBoundary() throws FeatureException {
 		ArrayList<FeatureType> features = new ArrayList<FeatureType>();
-		features.add(new FeatureShingles(3, FeatureShingles.SizeType.SENTENCES));
+		features.add(FeatureShingles.withSize(3, FeatureShingles.SizeType.SENTENCES));
 
 		HashGenerator hasher = new XxHashGenerator();
 		NearDuplicateDetection ndd = new NearDuplicateDetectionCrawlhash(3, ImmutableList.copyOf(features), hasher);
