@@ -26,7 +26,7 @@ public class DuplicateDetectionExample {
 	public static void main(String[] args) {
 		// Setup the custom near-duplicate detection.
 		// We will use a feature of 2 WORDS to generate fingerprints.
-		FeatureType feature = new FeatureShingles(2, SizeType.WORDS);
+		FeatureType feature = FeatureShingles.withSize(2, SizeType.WORDS);
 		List<FeatureType> features = new ArrayList<FeatureType>();
 		features.add(feature);
 		// Broder's algorithm for the fingerprint-generation;
