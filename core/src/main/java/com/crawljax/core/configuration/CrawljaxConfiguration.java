@@ -16,11 +16,9 @@ import com.crawljax.core.plugin.Plugin;
 import com.crawljax.core.state.NDDStateVertexFactory;
 import com.crawljax.core.state.StateVertexFactory;
 import com.crawljax.core.state.duplicatedetection.NearDuplicateDetection;
-import com.crawljax.domcomparators.DomStructureStripper;
 import com.crawljax.domcomparators.AttributesStripper;
 import com.crawljax.domcomparators.DomStripper;
-import com.crawljax.domcomparators.HeadStripper;
-import com.crawljax.domcomparators.RedundantWhiteSpaceStripper;
+import com.crawljax.domcomparators.DomTextContentStripper;
 import com.crawljax.domcomparators.ValidDomStripper;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -280,10 +278,8 @@ public class CrawljaxConfiguration {
 
 			if (config.strippers.isEmpty() && config.validStrippers.isEmpty()) {
 				config.strippers = ImmutableList.of(
-						new HeadStripper(),
-						new DomStructureStripper(),
-						new AttributesStripper(),
-						new RedundantWhiteSpaceStripper()
+						new DomTextContentStripper(),
+						new AttributesStripper()
 				);
 			}
 			return config;
