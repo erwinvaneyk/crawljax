@@ -31,7 +31,7 @@ import com.google.common.collect.ImmutableCollection;
  * 
  * <h3>Differences Algorithms</h3>
  * <p>
- * Two algorithms are provided, namely Broder and Crawlhash. Crawlhash is a efficient
+ * Two algorithms are provided, namely Broder and Crawlhash. Crawlhash is an efficient
  * implementation, which generatates only one 32 bit hash. This reduces the overhead and processing
  * time. Broder, on the other hand, generates a set of hashes for a single state. This makes it
  * slower than Crawlhash, but it provides more consistent and accurate results.

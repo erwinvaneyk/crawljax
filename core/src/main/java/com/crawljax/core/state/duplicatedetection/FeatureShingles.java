@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * FeatureShingles represents the features based on collecting shingles from a document. An example
- * of a 2-shingle-collection of the string <code>"abcd" => {"ab","bc","cd"}</code>. <a
+ * of a 2-shingle-collection of the string <code>"abcd" = {"ab","bc","cd"}</code>. <a
  * href="http://en.wikipedia.org/wiki/W-shingling">More information.</a>
  */
 public class FeatureShingles implements FeatureType {
@@ -61,7 +61,7 @@ public class FeatureShingles implements FeatureType {
 	/**
 	 * @param size
 	 *            represents the size of a single shingle in the number of chunks.
-	 * @param type
+	 * @param regex
 	 *            a string representation of a regular expression-pattern.
 	 * @see java.util.regex.Pattern
 	 */
