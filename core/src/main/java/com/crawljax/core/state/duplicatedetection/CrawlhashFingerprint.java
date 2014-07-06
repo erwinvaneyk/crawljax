@@ -64,7 +64,8 @@ public class CrawlhashFingerprint implements Fingerprint {
 	 * 
 	 * @param other
 	 *            the Fingerprint of which the type should be the same as this.
-	 * @return Broderfingerprint if other is a Broderfingerprint, else a Runtime-exception is thrown.
+	 * @return Broderfingerprint if other is a Broderfingerprint, else a Runtime-exception is
+	 *         thrown.
 	 */
 	private CrawlhashFingerprint fingerprintTypeCheck(Fingerprint other) {
 		if (!this.getClass().isInstance(other))
@@ -75,8 +76,8 @@ public class CrawlhashFingerprint implements Fingerprint {
 	}
 
 	/**
-	 * The <a href="http://en.wikipedia.org/wiki/Hamming_distance">Hamming-distance</a> calculates the distance
-	 * between two hashes.
+	 * The <a href="http://en.wikipedia.org/wiki/Hamming_distance">Hamming-distance</a> calculates
+	 * the distance between two hashes.
 	 * 
 	 * @param hash1
 	 *            int-represented bit-hash

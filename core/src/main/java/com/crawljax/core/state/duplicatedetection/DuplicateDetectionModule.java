@@ -16,18 +16,23 @@ public class DuplicateDetectionModule extends AbstractModule {
 	private NearDuplicateDetection nearDuplicateDetectionFactory;
 
 	/**
-	 * Constructor with a custom nearDuplicateDetection-instance, which will be used by Guice. If null, Guice will use the default near-duplicate detection.
-	 * @param factory a NearDuplicateDetection, a hashgenator is not needed as it will be overriden by Guice. 
+	 * Constructor with a custom nearDuplicateDetection-instance, which will be used by Guice. If
+	 * null, Guice will use the default near-duplicate detection.
+	 * 
+	 * @param factory
+	 *            a NearDuplicateDetection, a hashgenator is not needed as it will be overriden by
+	 *            Guice.
 	 */
 	public DuplicateDetectionModule(NearDuplicateDetection factory) {
 		// Set defaults
 		nearDuplicateDetectionFactory = factory;
 	}
-	
+
 	/**
 	 * Constructor for using the default NearDuplicateDetection.
 	 */
-	public DuplicateDetectionModule() {}
+	public DuplicateDetectionModule() {
+	}
 
 	/**
 	 * Used by Guice
@@ -39,8 +44,11 @@ public class DuplicateDetectionModule extends AbstractModule {
 	}
 
 	/**
-	 * Provider-method for the NearDuplicateDetection. If specified it will use the NearDuplicateDetection-instance supplied in the constructor.
-	 * @param hasher Guice will supply the HashGenerator, which is binded in configure()
+	 * Provider-method for the NearDuplicateDetection. If specified it will use the
+	 * NearDuplicateDetection-instance supplied in the constructor.
+	 * 
+	 * @param hasher
+	 *            Guice will supply the HashGenerator, which is binded in configure()
 	 * @return a NearDuplicateDetection-instance
 	 */
 	@Provides
