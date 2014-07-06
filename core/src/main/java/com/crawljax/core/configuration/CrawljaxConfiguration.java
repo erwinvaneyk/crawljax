@@ -172,11 +172,22 @@ public class CrawljaxConfiguration {
 		}
 		
 		/**
-		 * Set a custom {@link com.crawljax.core.state.duplicatedetection.NearDuplicateDetection}, which resembles a
-		 * particular type of near-duplicate detection algorithm.
+		 * <p>Set a custom {@link com.crawljax.core.state.duplicatedetection.NearDuplicateDetection}, which resembles a
+		 * particular type of near-duplicate detection algorithm.</p>
 		 * 
-		 * To enable near-duplicate detection a {@link com.crawljax.core.state.NDDStateVertexFactory} needs to be set.
-		 * Therefore, if no stateVertexFactory has been set yet, the default NDDStateVertexFactory will be set.
+		 * <p>To enable near-duplicate detection a {@link com.crawljax.core.state.NDDStateVertexFactory} needs to be set.
+		 * Therefore, if no stateVertexFactory has been set yet, the default NDDStateVertexFactory will be set.</p>
+		 * 
+		 * <p>Keep in mind that the near-duplicate detection process depends on the stripped DOM. So different 
+		 * DOM strippers will lead to different to different performances of the duplicate detection.</p>
+		 * 
+		 * Recommended set of DOM strippers to use with the default duplicate detection settings:
+		 * <ul>
+		 * <li>{@link com.crawljax.domcomparators.HeadStripper}</li>
+		 * <li>{@link com.crawljax.domcomparators.DomStructureStripper</li>
+		 * <li>{@link com.crawljax.domcomparators.AttributeStripper}</li>
+		 * <li>{@link com.crawljax.domcomparators.WhiteSpaceStripper}</li>
+		 * </ul>
 		 * 
 		 * @param factory a NearDuplicateDetection-factory.
 		 * @return The builder for method chaining.
